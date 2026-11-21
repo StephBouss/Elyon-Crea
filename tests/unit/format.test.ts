@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { formatFCFA, formatNombre } from "@/lib/format";
 
-const NBSP = " ";
+const NBSP = "\u00A0";
 
 describe("formatNombre", () => {
   it("groupe les milliers avec des espaces insécables", () => {
@@ -26,6 +26,7 @@ describe("formatFCFA", () => {
     expect(formatFCFA(150000)).toBe(`150${NBSP}000${NBSP}FCFA`);
   });
   it("ne contient aucun espace sécable", () => {
+    // Vérifie volontairement un espace normal (U+0020, coupable) et non l'espace insécable.
     expect(formatFCFA(990000)).not.toMatch(/ /);
   });
 });

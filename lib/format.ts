@@ -1,4 +1,4 @@
-const NBSP = " ";
+const NBSP = "\u00A0";
 
 /** 500000 → "500 000" (espaces insécables, jamais coupé). */
 export function formatNombre(n: number): string {
