@@ -20,7 +20,7 @@ Une tâche est cochée seulement quand build, lint, tests et tests Playwright pa
 ## Étape 1 · Lot 2 — Base de données et e-mails
 - [x] 8. [Steph] Créer le projet Supabase (tâche 4) ✅ (paramètres locaux renseignés · connexion vérifiée)
 - [x] 9. [Claude] Créer les tables, la sécurité et le contenu de départ (tâche 5) ✅ (6 tables protégées · stockage vérifié · migrations synchronisées · build et lint OK · Playwright 16/16 · captures vérifiées)
-- [ ] 10. [Claude] Lire le contenu depuis Supabase (tâche 6)
+- [x] 10. [Claude] Lire le contenu depuis Supabase (tâche 6) ✅ (lecture réelle vérifiée · 23/23 tests unitaires · build et lint OK · Playwright 16/16 · captures vérifiées)
 - [ ] 11. [Steph] Créer le compte Resend (tâche 7)
 
 ## Étape 1 · Lot 3 — Cadre du site (nouveau design premium)
