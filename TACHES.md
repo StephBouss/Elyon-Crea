@@ -10,6 +10,7 @@ Une tâche est cochée seulement quand build, lint, tests et tests Playwright pa
 ## Phase 2 — Maquette ✅
 - [x] 3. [Steph] Sélectionner les maquettes dans Banani ✅
 - [x] 4. [Claude] Exporter et analyser les maquettes ✅ (design/banani/)
+- [x] 4b. [Steph] Nouvelle direction artistique premium : style de référence, charte du logo, constellation colibri / cerveau / ampoule ✅ (2026-11-21 — `design/style-guide-premium.md`, spec §4.0)
 
 ## Étape 1 · Lot 1 — Fondations
 - [ ] 5. [Claude] Créer le projet Next.js, les couleurs et cette liste (plan : tâche 1)
@@ -22,27 +23,27 @@ Une tâche est cochée seulement quand build, lint, tests et tests Playwright pa
 - [ ] 10. [Claude] Lire le contenu depuis Supabase (tâche 6)
 - [ ] 11. [Steph] Créer le compte Resend (tâche 7)
 
-## Étape 1 · Lot 3 — Cadre du site
-- [ ] 12. [Claude] Animations, logo, images provisoires (tâche 8)
-- [ ] 13. [Claude] En-tête collant + menu burger (tâche 9)
-- [ ] 14. [Claude] Pied de page + bouton WhatsApp (tâche 10)
+## Étape 1 · Lot 3 — Cadre du site (nouveau design premium)
+- [ ] 12. [Claude] Couleurs de la charte, polices Manrope + Inter, outils d'animation (tâche 8)
+- [ ] 13. [Claude] En-tête transparent + menu plein écran (tâche 9)
+- [ ] 14. [Claude] Pied de page au nom géant + bouton WhatsApp (tâche 10)
 
-## Étape 1 · Lot 4a — Landing (haut de page)
-- [ ] 15. [Claude] Diaporama du Hero (tâche 11)
-- [ ] 16. [Claude] Chiffres clés animés (tâche 12)
-- [ ] 17. [Claude] Problème → Solution (tâche 13)
-- [ ] 18. [Claude] Pile de valeur + places en temps réel (tâche 14)
+## Étape 1 · Lot 4a — Landing : la constellation
+- [ ] 15. [Claude] Formes de la constellation : colibri, cerveau, ampoule (tâche 11)
+- [ ] 16. [Claude] Moteur de particules (tâche 12)
+- [ ] 17. [Claude] Hero plein écran avec les 4 messages (tâche 13)
 
-## Étape 1 · Lot 4b — Landing (offre)
-- [ ] 19. [Claude] 11 pôles d'expertise (tâche 15)
-- [ ] 20. [Claude] Formules (tâche 16)
-- [ ] 21. [Claude] Réalisations (aperçu) (tâche 17)
+## Étape 1 · Lot 4b — Landing : le message
+- [ ] 18. [Claude] Chiffres clés géants (tâche 14)
+- [ ] 19. [Claude] Problème → Solution (tâche 15)
+- [ ] 20. [Claude] Ce que contient l'offre + places en temps réel (tâche 16)
 
-## Étape 1 · Lot 4c — Landing (bas de page)
-- [ ] 22. [Claude] Garantie (tâche 18)
-- [ ] 23. [Claude] FAQ (tâche 19)
-- [ ] 24. [Claude] Appel à l'action final (tâche 20)
-- [ ] 25. [Claude] Référencement Google + vitesse mobile ≥ 90 (tâche 21)
+## Étape 1 · Lot 4c — Landing : l'offre et la fin
+- [ ] 21. [Claude] 11 pôles d'expertise dépliables (tâche 17)
+- [ ] 22. [Claude] Formules (tâche 18)
+- [ ] 23. [Claude] Réalisations en défilement horizontal (tâche 19)
+- [ ] 24. [Claude] Garantie + FAQ (tâche 20)
+- [ ] 25. [Claude] Appel final + Google + vitesse mobile ≥ 90 (tâche 21)
 
 ## Étape 1 · Lot 5 — Audit gratuit
 - [ ] 26. [Claude] Règles du formulaire (tâche 22)

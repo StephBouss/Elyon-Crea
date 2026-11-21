@@ -4,7 +4,7 @@
 
 **Goal:** Mettre en ligne le site public d'Elyon Créa (landing 12 sections, `/audit-gratuit`, `/realisations`, `/mentions-legales`, `/connexion` + `/admin` protégé), avec contenu modifiable dans Supabase et formulaire d'audit complet.
 
-**Architecture:** Un seul projet Next.js (App Router, TypeScript) à la racine du dépôt. Pages publiques pré-générées et rafraîchies toutes les 60 s (ISR) à partir de Supabase (client anonyme **sans cookies**, sinon la page devient dynamique). Logique métier isolée dans `lib/` (fonctions pures testées avec Vitest), interface dans `components/site/`, routes serveur dans `app/api/`. Les maquettes Banani (`design/banani/`) sont la référence visuelle.
+**Architecture:** Un seul projet Next.js (App Router, TypeScript) à la racine du dépôt. Pages publiques pré-générées et rafraîchies toutes les 60 s (ISR) à partir de Supabase (client anonyme **sans cookies**, sinon la page devient dynamique). Logique métier isolée dans `lib/` (fonctions pures testées avec Vitest), interface dans `components/site/`, routes serveur dans `app/api/`. **Direction artistique premium** (révision du 2026-11-21) : `design/style-guide-premium.md` + section 4.0 de la spec ; couleurs et polices de la charte du logo (`design/logo/`) ; les maquettes Banani (`design/banani/`) ne servent plus que pour le **contenu**. Hero = constellation de particules en canvas 2D (`lib/constellation/`).
 
 **Tech Stack:** Next.js (dernière stable) · TypeScript · Tailwind CSS v4 · shadcn/ui · Motion · GSAP (ScrollTrigger, SplitText) + `@gsap/react` · Lenis · Supabase (`@supabase/ssr`, `@supabase/supabase-js`) · React Hook Form + Zod · Resend + `@react-email/components` · lucide-react · Vitest · Playwright + `@axe-core/playwright`.
 
@@ -18,22 +18,34 @@
 - Montants : entiers FCFA, affichés `500 000 FCFA` via `formatFCFA()` (espaces insécables U+00A0, ne se coupe jamais).
 - **Contenu fictif interdit** : chiffres clés, réalisations, clients, téléphone, réseaux sociaux non fournis → afficher `[À CONFIRMER]`. Ne jamais citer Moov Africa, TotalEnergies, BGFI Bank, SEEG, Savane Mode, Gabon Oil Corp, Olam, Sobraga.
 - Couleurs : **uniquement des tokens Tailwind** déclarés dans `app/globals.css` (`@theme`). Aucune couleur hexadécimale dans un composant.
-- Palette (Option A Banani) : magenta `#C2147A`, or `#F9B000`, noirs `#0E0E0E` / `#161616` / `#0A0A0A`, crème `#FAF8F5`. Police **DM Sans**.
+- Palette (charte du logo, révision du 2026-11-21) : fond noir pur `#000000` partout ; texte Blanc rosé `#FCF8FB`, gris `#9a9a9a` / `#bdbdbd` ; bouton plein Orchidée `#A10684` (texte blanc, **jamais d'Orchidée en texte sur noir**) ; accent Cyan doux `#38BFCB` ; profondeur Prune nuit `#281B2A` ; Rose poudré `#EEDCE9`. Polices **Manrope** (titres 400, libellés 600) et **Inter** (texte 200 à 18 px). Aucune carte, bordure ni ombre (sauf champs de formulaire) ; **une seule pilule pleine par écran**.
 - Responsive : mobile d'abord ; largeurs testées **360, 390, 768, 1024, 1280, 1440, 1920** + WebKit 390. Conteneur `max-w-7xl mx-auto px-4 md:px-8`. Jamais `100vw`, jamais de largeur/hauteur en px recopiée de la maquette, `min-h-dvh` plutôt que `100vh`. **Interdit** : `overflow-x-hidden` sur `html`/`body`.
 - Texte : `min-w-0` sur les enfants flex/grid, `break-words` sur e-mails/liens, pas de hauteur fixe sur un bloc de texte. Texte courant ≥ 16 px sur mobile, champs de formulaire ≥ 16 px. Zones cliquables ≥ 44 × 44 px.
 - Animations : uniquement `transform` et `opacity`, durées 0,4–0,8 s, `prefers-reduced-motion` respecté. GSAP et Lenis **uniquement** dans `app/(site)`. CLS < 0,1.
 - Accessibilité : 0 violation axe `critical`/`serious`. Si axe signale un contraste insuffisant sur un token gris, **éclaircir le token** (le plus petit écart qui passe AA) et le noter dans le commit.
 - Secrets : `.env.local` jamais commité ; `.env.example` à jour sans valeurs. `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `IP_HASH_SALT` : **code serveur uniquement** (fichiers qui importent `server-only`).
 - Toutes les entrées de formulaire validées par Zod **côté client et côté serveur**.
-- Définition de « terminé » (chaque tâche `[Claude]`) : `npm run build` ✅ · `npm run lint` ✅ · `npm run test` ✅ · `npm run test:e2e` ✅ pour les pages touchées · captures `tests/screenshots/` **regardées** et comparées à la maquette. Puis cocher la tâche dans `TACHES.md` avec le résumé `(build OK · Playwright X/X · captures vérifiées)`.
+- Définition de « terminé » (chaque tâche `[Claude]`) : `npm run build` ✅ · `npm run lint` ✅ · `npm run test` ✅ · `npm run test:e2e` ✅ pour les pages touchées · captures `tests/screenshots/` **regardées** et jugées au regard du style premium (section 4.0 de la spec) et du contenu Banani. Puis cocher la tâche dans `TACHES.md` avec le résumé `(build OK · Playwright X/X · captures vérifiées)`.
 - Commits : message en français, préfixe conventionnel (`feat:`, `test:`, `chore:`, `docs:`, `fix:`), terminé par `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 - Avant d'écrire du code Next.js : lire la doc embarquée de la version installée (`node_modules/next/dist/docs/` si présente) pour les conventions qui ont changé (`proxy.ts` vs `middleware.ts`, `preload` vs `priority` sur `next/image`, config ISR).
 
 ---
 
-## Règles de conversion Banani → React (s'appliquent à toutes les tâches d'interface)
+## Règles de direction artistique (s'appliquent à toutes les tâches d'interface)
 
-Les fichiers `design/banani/**/*.jsx` sont des **maquettes**, pas du code de production :
+- Fond `bg-canvas` sur toutes les sections ; **pas** de cartes, panneaux gris, bordures ni ombres (exception : champs de formulaire en `border-line`, rayon 12 px).
+- Titres en `text-display` / `text-heading-lg` / `text-heading` / `text-heading-sm` / `text-subheading` (Manrope 400, jamais gras) ; texte en `text-body-lg` (Inter 200) ; libellés et menu en `text-label`.
+- Petits titres au-dessus des titres : `text-label text-accent`. Mots mis en valeur : `text-accent`. Liens : `text-ink` ou `text-accent`, soulignement au survol.
+- **Une seule** `btn-pill` (Orchidée) par écran visible ; actions secondaires en `btn-ghost`.
+- Mise en page aérée : conteneur `mx-auto max-w-[1280px] px-5 md:px-10`, sections `py-24 md:py-32 lg:py-40`, compositions en deux colonnes asymétriques alternées (zigzag) sur PC.
+- Mobile : titres grands (minimums des utilitaires), mise en page repensée (empilement, ordre logique), jamais une simple miniature du PC.
+- Animations GSAP + ScrollTrigger (`lib/gsap.ts`) ; effets lourds (épinglage, défilement horizontal) **uniquement ≥ 1024 px** ; tout coupé en `prefers-reduced-motion`.
+
+**Correspondance des anciennes classes Banani** (pour les tâches 22–29 rédigées avant la révision) : `bg-dark`, `bg-dark-card`, `bg-light`, `bg-background` → `bg-canvas` · `text-foreground`, `text-ink-100`, `text-light` → `text-ink` · `text-muted`, `text-muted-foreground`, `text-ink-400…700` → `text-ash` (ou `text-mist`) · `text-secondary`, `text-accent-gold`, `bg-secondary` (bouton) → bouton `btn-pill` ; texte or → `text-accent` · `text-accent-magenta`, `text-primary` (texte) → `text-accent` · `border-light-card`, `border-border` → `border-line` (champs) ou suppression · cartes `rounded-xl p-10 border` → suppression du cadre, espacement seul.
+
+### Contenu des maquettes Banani
+
+Les fichiers `design/banani/**/*.jsx` sont des **maquettes de contenu**, pas du code de production :
 
 | Dans la maquette | Dans le code |
 |---|---|
@@ -47,8 +59,7 @@ Les fichiers `design/banani/**/*.jsx` sont des **maquettes**, pas du code de pro
 | `<h1>` en double dans le Hero | un seul `<h1>` contenant deux `<span className="block">` |
 | Dégradés `linear-gradient(...)` en style inline | utilitaires `@utility` déclarés dans `app/globals.css` (tâche 1) |
 
-**Tokens gris de la maquette → classes :**
-`#f0f0f0`→`ink-100` · `#c0c0c0`→`ink-200` · `#aaaaaa`→`ink-300` · `#9a9a9a`→`ink-400` (= `muted-foreground`) · `#7a7a7a`→`ink-500` · `#6E6E6E`→`ink-600` (= `muted`) · `#555555`→`ink-700` · `#222222`→`line` · `#1e1e1e`→`line-soft` · `#111111`→`surface` · `#1a1a1a`→`surface-2` (= `input`) · `#1a1200`→`gold-deep` · `#1f1800`→`gold-deep-2` · `#1a0a12`→`plum` · `#0d0d0d`→`ink-black`.
+**Couleurs, dégradés, cartes et tailles de la maquette Banani : ignorés.** Seuls comptent les textes, l'ordre des sections et les champs ; le rendu suit les Règles de direction artistique ci-dessus.
 
 ---
 
@@ -56,7 +67,7 @@ Les fichiers `design/banani/**/*.jsx` sont des **maquettes**, pas du code de pro
 
 ```
 app/
-  layout.tsx                         racine : <html lang="fr">, police DM Sans, métadonnées par défaut
+  layout.tsx                         racine : <html lang="fr">, polices Manrope + Inter, métadonnées par défaut
   globals.css                        Tailwind v4 + tokens @theme + utilitaires dégradés
   (site)/
     layout.tsx                       Header, Footer, WhatsAppButton, SmoothScroll (Lenis), MotionConfig
@@ -80,7 +91,7 @@ components/
     header.tsx · mobile-menu.tsx · footer.tsx · whatsapp-button.tsx · logo.tsx
     icons/brand-icons.tsx
     motion/reveal.tsx · motion/counter.tsx · motion/smooth-scroll.tsx · motion/split-title.tsx
-    sections/hero-slideshow.tsx · stats.tsx · problem-solution.tsx · stack-valeur.tsx
+    sections/hero.tsx · stats.tsx · problem-solution.tsx · stack-valeur.tsx
              places-restantes.tsx · services.tsx · formules.tsx · portfolio.tsx
              garantie.tsx · faq.tsx · cta-final.tsx · section-heading.tsx
     realisations/realisations-grid.tsx · realisation-card.tsx
@@ -100,7 +111,7 @@ supabase/migrations/20261121000001_contenu_landing.sql
 supabase/migrations/20261121000002_audit_admins_storage.sql
 supabase/seed.sql
 scripts/generate-placeholders.mjs
-public/images/hero/slide-{1..4}.jpg · public/images/placeholders/realisation.jpg · public/images/logo-elyon-crea.png
+public/constellation/formes.json · public/images/placeholders/realisation-{1..6}.jpg · public/images/logo-elyon-crea.png
 tests/
   unit/*.test.ts                     Vitest
   e2e/utils/layout.ts                contrôles débordement, axe, captures
@@ -1371,95 +1382,216 @@ git commit -m "feat: clients Supabase et lecture du contenu de la landing"
 
 ---
 
-## Lot 3 — Cadre du site public
+## Lot 3 — Cadre du site public (direction artistique premium)
 
-### Task 8: [Claude] Outils d'animation, logo, images provisoires et layout du site
+> **Révision du 2026-11-21** : ce lot et le suivant remplacent la version « Banani ». Référence visuelle : `design/style-guide-premium.md` + section 4.0 de la spec. Les maquettes Banani ne servent plus que pour les **textes**.
+
+### Task 8: [Claude] Tokens premium, polices Manrope + Inter, GSAP + Lenis, briques d'animation
 
 **Files:**
-- Create: `lib/gsap.ts`, `components/site/motion/smooth-scroll.tsx`, `components/site/motion/reveal.tsx`, `components/site/motion/counter.tsx`, `components/site/motion/split-title.tsx`, `components/site/logo.tsx`, `components/site/icons/brand-icons.tsx`, `components/site/sections/section-heading.tsx`, `scripts/generate-placeholders.mjs`, `app/(site)/layout.tsx`
-- Create (générés) : `public/images/hero/slide-{1,2,3,4}.jpg`, `public/images/placeholders/realisation.jpg`, `public/images/logo-elyon-crea.png`
+- Modify: `app/globals.css` (remplacer le bloc `@theme` et les `@utility` Banani), `app/layout.tsx` (polices)
+- Create: `lib/gsap.ts`, `components/site/motion/smooth-scroll.tsx`, `components/site/motion/reveal.tsx`, `components/site/motion/counter.tsx`, `components/site/motion/split-title.tsx`, `components/site/logo.tsx`, `components/site/icons/brand-icons.tsx`, `components/site/sections/section-heading.tsx`, `public/images/logo-elyon-crea.png`, `app/(site)/layout.tsx`
 
 **Interfaces:**
 - Produces :
-  - `gsap`, `ScrollTrigger`, `SplitText`, `useGSAP` réexportés par `lib/gsap.ts` (plugins enregistrés une fois)
-  - `<SmoothScroll>{children}</SmoothScroll>` — Lenis, désactivé si `prefers-reduced-motion`
-  - `<Reveal as?="div" delay?={0} y?={24} className?>` — fondu + montée à l'apparition (Motion)
-  - `<RevealGroup stagger?={0.08}>` + `<RevealItem>` — apparition en cascade
-  - `<Counter to={250} prefixe="+" suffixe="" />` — compteur animé à l'apparition
-  - `<SplitTitle as="h1|h2" className>{texte}</SplitTitle>` — mots révélés un par un (GSAP SplitText)
-  - `<Logo className? priority? />` — `next/image` du logo, `alt="Elyon Créa"`
-  - `FacebookIcon`, `LinkedinIcon`, `WhatsAppIcon`, `GoogleIcon`, `MicrosoftIcon` (props `SVGProps<SVGSVGElement>`)
-  - `<SectionHeading surtitre titre description? align?="center"|"left" tone?="dark"|"light" />`
+  - Classes de tokens : `bg-canvas`, `text-ink`, `text-ash`, `text-mist`, `text-poudre`, `bg-primary` / `text-primary-foreground` (Orchidée), `text-accent` / `bg-accent` (Cyan doux), `bg-prune`, `border-line` (champs de formulaire uniquement), `bg-whatsapp`
+  - Polices : `font-display` (Manrope), `font-body` (Inter, défaut du `body`)
+  - Utilitaires typographiques : `text-display`, `text-heading-lg`, `text-heading`, `text-heading-sm`, `text-subheading`, `text-body-lg`, `text-label`
+  - Utilitaire bouton : `btn-pill` (pilule Orchidée) et `btn-ghost` (lien discret)
+  - `gsap`, `ScrollTrigger`, `SplitText`, `useGSAP` (`lib/gsap.ts`)
+  - `<SmoothScroll>` (Lenis synchronisé avec ScrollTrigger)
+  - `<Reveal y?={30} delay?={0} stagger?={0} className? as?>` — révélation au défilement (GSAP) ; si `stagger > 0`, anime les enfants directs un par un
+  - `<Counter to={250} prefixe? suffixe? className? />`
+  - `<SplitTitle as="h1"|"h2" className? delay?>` — mots qui glissent depuis un masque (sans opacité)
+  - `<Logo className? priority? />`, icônes `FacebookIcon`, `LinkedinIcon`, `WhatsAppIcon`, `GoogleIcon`, `MicrosoftIcon`
+  - `<SectionHeading surtitre titre description? align?="left"|"center" taille?="lg"|"md" />`
 
-- [ ] **Step 1: Images provisoires** — `scripts/generate-placeholders.mjs`
+- [ ] **Step 1: Tokens** — dans `app/globals.css`, remplacer **tout** le bloc `@theme { … }` et les quatre `@utility` Banani par :
 
-```js
-// Génère des images sombres aux couleurs Elyon Créa, en attendant les vraies images de Steph.
-import sharp from "sharp";
-import { mkdir } from "node:fs/promises";
+```css
+@theme {
+  --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-const svg = (w, h, a, b, label) => `
-<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
-  <defs>
-    <radialGradient id="g1" cx="75%" cy="40%" r="60%"><stop offset="0" stop-color="${a}" stop-opacity="0.55"/><stop offset="1" stop-color="#0E0E0E" stop-opacity="0"/></radialGradient>
-    <radialGradient id="g2" cx="90%" cy="85%" r="45%"><stop offset="0" stop-color="${b}" stop-opacity="0.35"/><stop offset="1" stop-color="#0E0E0E" stop-opacity="0"/></radialGradient>
-  </defs>
-  <rect width="100%" height="100%" fill="#0E0E0E"/>
-  <rect width="100%" height="100%" fill="url(#g1)"/>
-  <rect width="100%" height="100%" fill="url(#g2)"/>
-  <text x="96%" y="94%" text-anchor="end" font-family="sans-serif" font-size="${Math.round(h / 40)}" fill="#ffffff" fill-opacity="0.25">${label}</text>
-</svg>`;
+  /* Charte du logo + style premium (design/style-guide-premium.md) */
+  --color-canvas: #000000;          /* fond de TOUTES les sections */
+  --color-ink: #fcf8fb;             /* Blanc rosé : titres et texte principal */
+  --color-ash: #9a9a9a;             /* texte secondaire, liens inactifs */
+  --color-mist: #bdbdbd;            /* texte tertiaire */
+  --color-poudre: #eedce9;          /* Rose poudré : touches douces */
+  --color-prune: #281b2a;           /* Prune nuit : profondeur, halos */
+  --color-line: #2e2430;            /* bordure des champs de formulaire uniquement */
+  --color-whatsapp: #25d366;
 
-const jobs = [
-  ["public/images/hero/slide-1.jpg", 1920, 1080, "#C2147A", "#F9B000", "Image provisoire — Stratégie"],
-  ["public/images/hero/slide-2.jpg", 1920, 1080, "#F9B000", "#C2147A", "Image provisoire — Création"],
-  ["public/images/hero/slide-3.jpg", 1920, 1080, "#C2147A", "#7828C8", "Image provisoire — Digital"],
-  ["public/images/hero/slide-4.jpg", 1920, 1080, "#7828C8", "#F9B000", "Image provisoire — IA"],
-  ["public/images/placeholders/realisation.jpg", 1200, 900, "#C2147A", "#F9B000", "Image à fournir"],
-];
+  /* Noms attendus par shadcn/ui */
+  --color-background: #000000;
+  --color-foreground: #fcf8fb;
+  --color-primary: #a10684;         /* Orchidée : bouton plein, jamais du texte sur noir */
+  --color-primary-foreground: #ffffff;
+  --color-accent: #38bfcb;          /* Cyan doux : petits titres, liens, mots mis en valeur */
+  --color-accent-foreground: #000000;
+  --color-secondary: #281b2a;
+  --color-secondary-foreground: #fcf8fb;
+  --color-muted: #281b2a;
+  --color-muted-foreground: #9a9a9a;
+  --color-card: #000000;
+  --color-card-foreground: #fcf8fb;
+  --color-popover: #0b070c;
+  --color-popover-foreground: #fcf8fb;
+  --color-border: #2e2430;
+  --color-input: #2e2430;
+  --color-ring: #38bfcb;
+  --color-destructive: #ff6b6b;
 
-await mkdir("public/images/hero", { recursive: true });
-await mkdir("public/images/placeholders", { recursive: true });
-for (const [out, w, h, a, b, label] of jobs) {
-  await sharp(Buffer.from(svg(w, h, a, b, label))).jpeg({ quality: 70, mozjpeg: true }).toFile(out);
-  console.log("✓", out);
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-xl: 24px;
+  --radius-3xl: 24px;
+  --radius: 24px;
+
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Échelle typographique premium : grande aussi sur mobile (minimums élevés). */
+@utility text-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 10.5vw, 7.0625rem); /* 40 px → 113 px */
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+@utility text-heading-lg {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 7vw, 4.875rem); /* 36 → 78 px */
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+@utility text-heading {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 3rem); /* 32 → 48 px */
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+@utility text-heading-sm {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3.4vw, 2.625rem); /* 24 → 42 px */
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+@utility text-subheading {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.375rem, 2.6vw, 2.25rem); /* 22 → 36 px */
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+@utility text-body-lg {
+  font-family: var(--font-body);
+  font-weight: 200;
+  font-size: 1.125rem; /* 18 px */
+  line-height: 1.5;
+}
+@utility text-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.875rem; /* 14 px */
+  line-height: 1.2;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+@utility btn-pill {
+  display: inline-flex;
+  min-height: 2.875rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  padding: 0.9rem 1.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  transition: transform 0.4s var(--ease-premium);
+  &:hover { transform: translateY(-2px) scale(1.02); }
+  &:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+}
+@utility btn-ghost {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  text-underline-offset: 6px;
+  &:hover { text-decoration: underline; text-decoration-color: var(--color-accent); }
+  &:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
 }
 ```
+Dans la suite du fichier : `body { background-color: var(--color-canvas); color: var(--color-ink); font-family: var(--font-body); font-weight: 200; }` ; garder la règle `prefers-reduced-motion` et `html { scroll-padding-top: 5rem; }`. Ajouter `h1,h2,h3,h4 { font-family: var(--font-display); font-weight: 400; }`.
+Puis remplacer dans tout le code existant les classes Banani encore utilisées (`grep -rn "bg-dark\|bg-light\|text-ink-\|text-secondary\|accent-magenta\|gold" app components`) selon le tableau « Correspondance des anciennes classes » (section Règles de direction artistique).
 
-Run: `node scripts/generate-placeholders.mjs` → Expected : 5 lignes `✓`.
+- [ ] **Step 2: Polices** — `app/layout.tsx` : remplacer `DM_Sans` par
 
-- [ ] **Step 2: Logo** — télécharger le logo de la maquette (provisoire, en attendant le fichier source de Steph) :
+```tsx
+import { Inter, Manrope } from "next/font/google";
+
+const manrope = Manrope({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-manrope", display: "swap" });
+const inter = Inter({ subsets: ["latin"], weight: ["200", "400", "600"], variable: "--font-inter", display: "swap" });
+// …
+<html lang="fr" className={`${manrope.variable} ${inter.variable}`}>
+  <body className="min-h-dvh bg-canvas text-ink antialiased">{children}</body>
+</html>
+```
+
+- [ ] **Step 3: Logo** — le logo couleur pour fond sombre : extraire depuis la charte (en attendant un export SVG de Steph) :
 
 ```bash
-curl -L -o public/images/logo-elyon-crea.png "https://firebasestorage.googleapis.com/v0/b/banani-prod.appspot.com/o/reference-images%2Fe1b20d7b-1888-489e-8690-4cf5f67247d8?alt=media&token=d175f110-6643-4e8c-b323-42ba1f471660"
-node -e "require('sharp')('public/images/logo-elyon-crea.png').metadata().then(m=>console.log(m.format,m.width,m.height))"
+node -e "
+const s=require('sharp');
+(async()=>{
+  // Version fond sombre de la charte : colibri + « Elyon Crea » blanc (zone en bas à gauche)
+  const {data,info}=await s('design/logo/charte-graphique.png').extract({left:28,top:470,width:500,height:140}).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+  for(let i=0;i<data.length;i+=4){const r=data[i],g=data[i+1],b=data[i+2];
+    const fond = Math.abs(r-40)<22 && Math.abs(g-27)<22 && Math.abs(b-42)<22; // Prune nuit
+    if(fond) data[i+3]=0;}
+  await s(data,{raw:info}).trim().png().toFile('public/images/logo-elyon-crea.png');
+  const m=await s('public/images/logo-elyon-crea.png').metadata(); console.log(m.width,m.height);
+})()"
 ```
-Expected : `png <largeur> <hauteur>` (noter les dimensions pour `components/site/logo.tsx`). Si le format n'est pas PNG, enregistrer avec la bonne extension et adapter le chemin.
+Ouvrir l'image produite avec l'outil Read et vérifier : colibri complet + « Elyon Crea » lisible, fond transparent, rien de coupé ; sinon ajuster `extract`. Noter `largeur hauteur` pour `logo.tsx` :
 
-`components/site/logo.tsx` (remplacer `LARGEUR`/`HAUTEUR` par les valeurs mesurées)
 ```tsx
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-const LARGEUR = 0; // ← largeur mesurée
-const HAUTEUR = 0; // ← hauteur mesurée
+const LARGEUR = 0; // ← mesurée
+const HAUTEUR = 0; // ← mesurée
 
 export function Logo({ className, priority = false }: { className?: string; priority?: boolean }) {
   return (
-    <Image
-      src="/images/logo-elyon-crea.png"
-      alt="Elyon Créa"
-      width={LARGEUR}
-      height={HAUTEUR}
-      priority={priority}
-      className={cn("h-10 w-auto md:h-12", className)}
-    />
+    <Image src="/images/logo-elyon-crea.png" alt="Elyon Créa" width={LARGEUR} height={HAUTEUR}
+      priority={priority} className={cn("h-9 w-auto md:h-10", className)} />
   );
 }
 ```
-(Si la version de Next.js installée a remplacé `priority` par `preload`, utiliser `preload`.)
+(Si Next a remplacé `priority` par `preload`, utiliser `preload`.)
 
-- [ ] **Step 3: `lib/gsap.ts`**
+- [ ] **Step 4: `lib/gsap.ts`**
 
 ```ts
 "use client";
@@ -1469,19 +1601,23 @@ import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
+gsap.defaults({ ease: "power3.out", duration: 0.8 });
 
 export { gsap, ScrollTrigger, SplitText, useGSAP };
 ```
 
-- [ ] **Step 4: Défilement fluide** — `components/site/motion/smooth-scroll.tsx`
+- [ ] **Step 5: Lenis synchronisé avec ScrollTrigger** — `components/site/motion/smooth-scroll.tsx`
 
 ```tsx
 "use client";
-import { ReactLenis } from "lenis/react";
-import { useEffect, useState } from "react";
+import { ReactLenis, type LenisRef } from "lenis/react";
+import { useEffect, useRef, useState } from "react";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const [reduced, setReduced] = useState(true);
+  const lenisRef = useRef<LenisRef>(null);
+
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduced(mq.matches);
@@ -1489,273 +1625,204 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
   }, []);
+
+  useEffect(() => {
+    if (reduced) return;
+    const update = (time: number) => lenisRef.current?.lenis?.raf(time * 1000);
+    gsap.ticker.add(update);
+    gsap.ticker.lagSmoothing(0);
+    const lenis = lenisRef.current?.lenis;
+    lenis?.on("scroll", ScrollTrigger.update);
+    return () => {
+      gsap.ticker.remove(update);
+      lenis?.off("scroll", ScrollTrigger.update);
+    };
+  }, [reduced]);
+
   if (reduced) return <>{children}</>;
   return (
-    <ReactLenis root options={{ lerp: 0.12, anchors: true }}>
+    <ReactLenis root ref={lenisRef} options={{ autoRaf: false, lerp: 0.1, anchors: { offset: -80 } }}>
       {children}
     </ReactLenis>
   );
 }
 ```
 
-- [ ] **Step 5: Apparitions** — `components/site/motion/reveal.tsx`
+- [ ] **Step 6: Révélation au défilement** — `components/site/motion/reveal.tsx`
 
 ```tsx
 "use client";
-import { motion, type HTMLMotionProps } from "motion/react";
+import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+type Props = {
+  children: React.ReactNode;
+  className?: string;
+  y?: number;
+  delay?: number;
+  stagger?: number; // > 0 : anime les enfants directs un par un
+  as?: "div" | "ul" | "ol" | "section";
+};
 
-type RevealProps = HTMLMotionProps<"div"> & { delay?: number; y?: number };
-
-export function Reveal({ delay = 0, y = 24, children, ...rest }: RevealProps) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, delay, ease: EASE }}
-      {...rest}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-export function RevealGroup({ stagger = 0.08, children, ...rest }: HTMLMotionProps<"div"> & { stagger?: number }) {
-  return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.15 }}
-      variants={{ hidden: {}, visible: { transition: { staggerChildren: stagger } } }}
-      {...rest}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-export function RevealItem({ children, ...rest }: HTMLMotionProps<"div">) {
-  return (
-    <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 24 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
-      }}
-      {...rest}
-    >
-      {children}
-    </motion.div>
-  );
+export function Reveal({ children, className, y = 30, delay = 0, stagger = 0, as: Tag = "div" }: Props) {
+  const ref = useRef<HTMLElement>(null);
+  useGSAP(() => {
+    const el = ref.current;
+    if (!el) return;
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const cibles = stagger > 0 ? Array.from(el.children) : [el];
+      gsap.from(cibles, {
+        y, opacity: 0, duration: 0.8, delay, stagger,
+        scrollTrigger: { trigger: el, start: "top 85%", once: true },
+      });
+    });
+    return () => mm.revert();
+  }, { scope: ref });
+  // @ts-expect-error ref générique sur balise dynamique
+  return <Tag ref={ref} className={className}>{children}</Tag>;
 }
 ```
 
-- [ ] **Step 6: Compteur** — `components/site/motion/counter.tsx`
+- [ ] **Step 7: Compteur** — `components/site/motion/counter.tsx`
 
 ```tsx
 "use client";
-import { animate, useInView, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { formatNombre } from "@/lib/format";
 
-export function Counter({ to, prefixe = "", suffixe = "" }: { to: number; prefixe?: string; suffixe?: string }) {
+export function Counter({ to, prefixe = "", suffixe = "", className }: { to: number; prefixe?: string; suffixe?: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const reduced = useReducedMotion();
-  const [valeur, setValeur] = useState(reduced ? to : 0);
-
-  useEffect(() => {
-    if (!inView || reduced) {
-      if (reduced) setValeur(to);
-      return;
-    }
-    const controls = animate(0, to, { duration: 0.8, ease: "easeOut", onUpdate: (v) => setValeur(v) });
-    return () => controls.stop();
-  }, [inView, reduced, to]);
-
-  return (
-    <span ref={ref} className="tabular-nums whitespace-nowrap">
-      {prefixe}
-      {formatNombre(valeur)}
-      {suffixe}
-    </span>
-  );
+  useGSAP(() => {
+    const el = ref.current;
+    if (!el) return;
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const etat = { v: 0 };
+      el.textContent = `${prefixe}${formatNombre(0)}${suffixe}`;
+      gsap.to(etat, {
+        v: to, duration: 1.6, ease: "power2.out",
+        scrollTrigger: { trigger: el, start: "top 85%", once: true },
+        onUpdate: () => { el.textContent = `${prefixe}${formatNombre(etat.v)}${suffixe}`; },
+      });
+    });
+    return () => mm.revert();
+  }, { scope: ref });
+  // Valeur finale dans le HTML (SEO, sans JavaScript, mouvement réduit).
+  return <span ref={ref} className={`tabular-nums whitespace-nowrap ${className ?? ""}`}>{prefixe}{formatNombre(to)}{suffixe}</span>;
 }
 ```
-Note : un compteur met à jour du texte (pas `transform`) ; c'est accepté car la largeur est stabilisée par `tabular-nums` et la valeur finale est déjà réservée par `min-w` du parent (tâche 12) → pas de CLS.
 
-- [ ] **Step 7: Titre révélé mot par mot** — `components/site/motion/split-title.tsx`
+- [ ] **Step 8: Titre mot par mot** — `components/site/motion/split-title.tsx`
 
 ```tsx
 "use client";
 import { useRef } from "react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
 
-type Props = { as?: "h1" | "h2"; className?: string; children: React.ReactNode; delay?: number };
+type Props = { as?: "h1" | "h2"; className?: string; children: React.ReactNode; delay?: number; auDefilement?: boolean };
 
-export function SplitTitle({ as: Tag = "h2", className, children, delay = 0 }: Props) {
+/** Les mots glissent depuis un masque. Pas d'opacité : le texte compte tout de suite pour le LCP. */
+export function SplitTitle({ as: Tag = "h2", className, children, delay = 0, auDefilement = true }: Props) {
   const ref = useRef<HTMLHeadingElement>(null);
-  useGSAP(
-    () => {
-      if (!ref.current) return;
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const split = SplitText.create(ref.current!, { type: "words", mask: "words" });
-        gsap.from(split.words, { yPercent: 110, opacity: 0, duration: 0.6, ease: "power3.out", stagger: 0.06, delay });
-        return () => split.revert();
+  useGSAP(() => {
+    if (!ref.current) return;
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const split = SplitText.create(ref.current!, { type: "words", mask: "words" });
+      gsap.from(split.words, {
+        yPercent: 110, duration: 0.9, ease: "power4.out", stagger: 0.05, delay,
+        scrollTrigger: auDefilement ? { trigger: ref.current!, start: "top 85%", once: true } : undefined,
       });
-      return () => mm.revert();
-    },
-    { scope: ref },
-  );
-  return (
-    <Tag ref={ref} className={className}>
-      {children}
-    </Tag>
-  );
+      return () => split.revert();
+    });
+    return () => mm.revert();
+  }, { scope: ref, dependencies: [children], revertOnUpdate: true });
+  return <Tag ref={ref} className={className}>{children}</Tag>;
 }
 ```
-Note : SplitText découpe le texte des enfants. Les enfants peuvent contenir des `<span className="block">` (ex. titre en deux lignes, la 2ᵉ en dégradé) — vérifier visuellement que le dégradé reste appliqué après découpage ; sinon appliquer `text-gradient-brand` sur chaque mot via `wordsClass`.
 
-- [ ] **Step 8: Icônes de marques** — `components/site/icons/brand-icons.tsx`
+- [ ] **Step 9: Icônes de marques** — `components/site/icons/brand-icons.tsx` : `FacebookIcon`, `LinkedinIcon`, `WhatsAppIcon`, `GoogleIcon`, `MicrosoftIcon` en SVG inline (`viewBox="0 0 24 24"`, `aria-hidden`, props `SVGProps<SVGSVGElement>`), tracés officiels simples ; Google et Microsoft gardent leurs couleurs officielles (exception assumée), les autres en `fill="currentColor"`.
 
-```tsx
-import type { SVGProps } from "react";
-
-type P = SVGProps<SVGSVGElement>;
-
-export const FacebookIcon = (p: P) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}>
-    <path d="M13.5 22v-8.2h2.8l.4-3.2h-3.2V8.6c0-.9.3-1.6 1.6-1.6h1.7V4.1c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.3v3.2h2.8V22h3.4z" />
-  </svg>
-);
-
-export const LinkedinIcon = (p: P) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}>
-    <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
-  </svg>
-);
-
-export const WhatsAppIcon = (p: P) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}>
-    <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.5h-.01a9.4 9.4 0 0 1-4.8-1.32l-.34-.2-3.57.94.95-3.48-.22-.36a9.43 9.43 0 0 1-1.44-5.03c0-5.2 4.24-9.44 9.45-9.44 2.52 0 4.9.99 6.68 2.77a9.38 9.38 0 0 1 2.76 6.68c0 5.21-4.24 9.44-9.46 9.44zm8.04-17.48A11.3 11.3 0 0 0 12.05.5C5.79.5.69 5.6.69 11.86c0 2 .52 3.96 1.52 5.68L.6 23.5l6.1-1.6a11.33 11.33 0 0 0 5.35 1.36h.01c6.26 0 11.36-5.1 11.36-11.36 0-3.03-1.18-5.89-3.33-8.03z" />
-  </svg>
-);
-
-export const GoogleIcon = (p: P) => (
-  <svg viewBox="0 0 24 24" aria-hidden {...p}>
-    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-  </svg>
-);
-
-export const MicrosoftIcon = (p: P) => (
-  <svg viewBox="0 0 24 24" aria-hidden {...p}>
-    <path d="M1 1h10.5v10.5H1z" fill="#F25022" />
-    <path d="M12.5 1H23v10.5H12.5z" fill="#7FBA00" />
-    <path d="M1 12.5h10.5V23H1z" fill="#00A4EF" />
-    <path d="M12.5 12.5H23V23H12.5z" fill="#FFB900" />
-  </svg>
-);
-```
-Note : les couleurs officielles des logos Google/Microsoft sont une exception assumée à la règle « tokens uniquement » (chartes de marques tierces).
-
-- [ ] **Step 9: En-tête de section réutilisable** — `components/site/sections/section-heading.tsx`
+- [ ] **Step 10: En-tête de section** — `components/site/sections/section-heading.tsx`
 
 ```tsx
 import { cn } from "@/lib/utils";
+import { SplitTitle } from "@/components/site/motion/split-title";
 import { Reveal } from "@/components/site/motion/reveal";
 
-type Props = {
-  surtitre: string;
-  titre: string;
-  description?: string;
-  align?: "center" | "left";
-  tone?: "dark" | "light"; // fond de la section
-  surtitreClassName?: string;
-  className?: string;
-};
+type Props = { surtitre: string; titre: string; description?: string; align?: "left" | "center"; taille?: "lg" | "md"; className?: string };
 
-export function SectionHeading({ surtitre, titre, description, align = "center", tone = "dark", surtitreClassName, className }: Props) {
+export function SectionHeading({ surtitre, titre, description, align = "left", taille = "lg", className }: Props) {
   return (
-    <Reveal className={cn("mb-10 md:mb-14", align === "center" && "mx-auto max-w-2xl text-center", className)}>
-      <span className={cn("mb-3 block text-xs font-semibold uppercase tracking-widest", surtitreClassName ?? "text-accent-magenta")}>
-        {surtitre}
-      </span>
-      <h2 className={cn("font-headings text-[clamp(1.75rem,4vw,2.25rem)] font-bold leading-tight", tone === "dark" ? "text-ink-100" : "text-foreground")}>
-        {titre}
-      </h2>
+    <div className={cn("mb-12 md:mb-20", align === "center" && "mx-auto max-w-4xl text-center", className)}>
+      <span className="text-label mb-5 block text-accent">{surtitre}</span>
+      <SplitTitle className={cn(taille === "lg" ? "text-heading-lg" : "text-heading", "text-ink")}>{titre}</SplitTitle>
       {description && (
-        <p className={cn("mt-4 text-base", tone === "dark" ? "text-ink-500" : "text-muted", align === "center" && "mx-auto max-w-lg")}>
-          {description}
-        </p>
+        <Reveal delay={0.2}>
+          <p className={cn("text-body-lg mt-6 max-w-xl text-mist", align === "center" && "mx-auto")}>{description}</p>
+        </Reveal>
       )}
-    </Reveal>
+    </div>
   );
 }
 ```
 
-- [ ] **Step 10: Layout du site** — `app/(site)/layout.tsx` (Header, Footer et WhatsAppButton sont créés aux tâches 9 et 10 : pour cette tâche, layout minimal ; les imports sont ajoutés aux tâches suivantes)
+- [ ] **Step 11: Layout du site** — `app/(site)/layout.tsx`
 
 ```tsx
-import { MotionConfig } from "motion/react";
 import { SmoothScroll } from "@/components/site/motion/smooth-scroll";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
-    <MotionConfig reducedMotion="user">
-      <SmoothScroll>
-        <div className="flex min-h-dvh flex-col bg-dark">
-          <div className="flex-1">{children}</div>
-        </div>
-      </SmoothScroll>
-    </MotionConfig>
+    <SmoothScroll>
+      <div className="flex min-h-dvh flex-col bg-canvas">
+        <div className="flex-1">{children}</div>
+      </div>
+    </SmoothScroll>
   );
 }
 ```
-`MotionConfig` étant un composant client, si le build signale une erreur de frontière serveur/client, l'envelopper dans un petit `components/site/motion/motion-provider.tsx` marqué `"use client"`.
 
-- [ ] **Step 11: Vérifier et commit**
+- [ ] **Step 12: Vérifier et commit**
 
 ```bash
 npm run build && npm run lint && npm run test && npx playwright test
 git add -A
-git commit -m "feat: outils d'animation, logo, images provisoires et layout du site"
+git commit -m "feat: tokens premium (charte du logo), polices Manrope + Inter, GSAP + Lenis"
 ```
 
 ---
 
-### Task 9: [Claude] En-tête (collant, flou au défilement, menu burger plein écran)
-
-**Maquette :** `design/banani/components/ElyonHeaderV2.jsx`
+### Task 9: [Claude] En-tête transparent (masqué en descendant, menu plein écran)
 
 **Files:**
 - Create: `components/site/header.tsx`, `components/site/mobile-menu.tsx`, `lib/navigation.ts`
 - Modify: `app/(site)/layout.tsx`, `tests/e2e/accueil.spec.ts`
 
 **Interfaces:**
-- Consumes : `Logo`, composant shadcn `Sheet`
+- Consumes : `Logo`, `gsap`, `ScrollTrigger`, shadcn `Sheet`
 - Produces : `NAV_LINKS: { label: string; href: string }[]` ; `<Header />`
 
-**Comportement attendu :**
+**Comportement :**
 
 | | Mobile (< 768) | Tablette (768–1023) | PC (≥ 1024) |
 |---|---|---|---|
-| Liens Services · Offre · Réalisations · Contact | dans le menu burger | dans le menu burger | visibles, `gap-10` |
-| Bouton « Audit gratuit » | **toujours visible** (petit, `px-4 py-2.5`, ≥ 44 px de haut) | visible | visible |
-| Menu burger | bouton 44×44 `aria-label="Ouvrir le menu"`, ouvre un `Sheet` plein écran (`side="right"`, `w-full`), liens en `text-2xl`, fermeture au clic sur un lien | idem | absent |
+| Liens Services · Offre · Réalisations · Contact | menu plein écran | menu plein écran | visibles, `text-label text-ash hover:text-ink`, `gap-10` |
+| Pilule « Audit gratuit » | **toujours visible** (`btn-pill`, `px-4`) | visible | visible |
+| Burger | bouton 44×44 `aria-label="Ouvrir le menu"` | idem | absent |
 
-- Collant : `sticky top-0 z-50`. Au défilement (> 24 px) : fond `bg-dark/75 backdrop-blur-md`, padding vertical réduit (`py-4` → `py-2.5`), logo `h-12` → `h-10`. Transition `transition-[padding,background-color] duration-300` (padding OK ici car l'en-tête est sticky et sa hauteur ne pousse pas le contenu : réserver la hauteur max via un wrapper `h-16 md:h-20` pour éviter tout CLS).
-- Liens : `text-sm font-medium tracking-wide text-muted-foreground hover:text-ink-100 focus-visible:outline-2 focus-visible:outline-secondary`.
-- Bouton : `bg-secondary text-secondary-foreground rounded-md font-semibold` → `<Link href="/audit-gratuit">`.
+- `fixed inset-x-0 top-0 z-50`, **transparent** sur le haut de page, sans bordure ni flou. Après 80 px de défilement : fond `bg-canvas` (noir uni). **Se masque en descendant, réapparaît en remontant** : `ScrollTrigger.create({ start: 0, end: "max", onUpdate: (self) => gsap.to(header, { yPercent: self.direction === 1 && self.scroll() > 120 ? -100 : 0, duration: 0.4, ease: "power2.out", overwrite: true }) })` (désactivé en mouvement réduit : en-tête toujours visible). Le focus clavier dans l'en-tête le fait toujours réapparaître (`onFocusCapture`).
+- Hauteur fixe `h-18 md:h-20` (pas de variation : aucun CLS).
+- `NAV_LINKS` : Services → `/#services`, Offre → `/#formules`, Réalisations → `/realisations`, Contact → `/#contact`.
+- **Menu mobile** : `Sheet` `side="top"`, `h-dvh w-full bg-canvas border-none` ; liens en `text-heading` (Manrope 32–48 px) numérotés `01`–`04` en `text-label text-accent` ; apparition des liens en cascade (`Reveal stagger={0.08}` déclenché à l'ouverture : utiliser `gsap.from` dans un `useEffect` sur `open`) ; pilule « Audit gratuit » en bas, pleine largeur ; fermeture au clic sur un lien ; bouton fermer `aria-label="Fermer le menu"` (traduire le « Close » de `components/ui/sheet.tsx`).
+- Le `<main>` des pages **n'a pas** de marge haute globale : le Hero passe sous l'en-tête ; les autres pages commencent par `pt-32 md:pt-40`.
 
-- [ ] **Step 1: Test e2e qui échoue** — ajouter dans `tests/e2e/accueil.spec.ts` :
+- [ ] **Step 1: Test e2e qui échoue** — `tests/e2e/accueil.spec.ts` :
 
 ```ts
-test("en-tête : bouton Audit gratuit toujours visible et menu burger sur mobile", async ({ page }, testInfo) => {
+test("en-tête : pilule Audit gratuit visible, menu plein écran sur mobile", async ({ page }, testInfo) => {
   await page.goto("/");
   const header = page.getByRole("banner");
   await expect(header.getByRole("link", { name: "Audit gratuit" })).toBeVisible();
@@ -1771,156 +1838,29 @@ test("en-tête : bouton Audit gratuit toujours visible et menu burger sur mobile
   }
 });
 ```
-Run: `npx playwright test -g "en-tête"` → Expected : FAIL.
+Run → FAIL.
 
-- [ ] **Step 2: `lib/navigation.ts`**
-
-```ts
-export const NAV_LINKS = [
-  { label: "Services", href: "/#services" },
-  { label: "Offre", href: "/#formules" },
-  { label: "Réalisations", href: "/realisations" },
-  { label: "Contact", href: "/#contact" },
-] as const;
-```
-(`/#contact` cible le pied de page, qui porte `id="contact"`.)
-
-- [ ] **Step 3: `components/site/header.tsx`**
-
-```tsx
-"use client";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Logo } from "@/components/site/logo";
-import { MobileMenu } from "@/components/site/mobile-menu";
-import { NAV_LINKS } from "@/lib/navigation";
-import { cn } from "@/lib/utils";
-
-export function Header() {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 border-b border-border transition-[padding,background-color] duration-300",
-        scrolled ? "bg-dark/75 py-2.5 backdrop-blur-md" : "bg-dark py-4",
-      )}
-    >
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 md:px-8">
-        <Link href="/" aria-label="Elyon Créa — accueil" className="shrink-0">
-          <Logo priority className={cn("transition-[height] duration-300", scrolled ? "h-9 md:h-10" : "h-10 md:h-12")} />
-        </Link>
-        <nav aria-label="Navigation principale" className="hidden lg:block">
-          <ul className="flex items-center gap-10">
-            {NAV_LINKS.map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className="text-sm font-medium tracking-wide text-muted-foreground transition-colors hover:text-ink-100">
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <div className="flex items-center gap-2">
-          <Link
-            href="/audit-gratuit"
-            className="inline-flex min-h-11 items-center rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground transition-opacity hover:opacity-90 md:px-6"
-          >
-            Audit gratuit
-          </Link>
-          <MobileMenu />
-        </div>
-      </div>
-    </header>
-  );
-}
-```
-Note CLS : la hauteur de l'en-tête varie au défilement, mais il est `sticky` et la variation ne survient qu'après un défilement utilisateur (exclu du CLS). Si Lighthouse signale un décalage, figer la hauteur (`h-16 md:h-20`) et n'animer que le logo via `scale`.
-
-- [ ] **Step 4: `components/site/mobile-menu.tsx`**
-
-```tsx
-"use client";
-import Link from "next/link";
-import { useState } from "react";
-import { Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { NAV_LINKS } from "@/lib/navigation";
-
-export function MobileMenu() {
-  const [open, setOpen] = useState(false);
-  return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <button type="button" aria-label="Ouvrir le menu" className="inline-flex size-11 items-center justify-center rounded-md text-ink-100 lg:hidden">
-          <Menu size={24} aria-hidden />
-        </button>
-      </SheetTrigger>
-      <SheetContent side="right" className="w-full border-none bg-dark sm:max-w-none">
-        <SheetTitle className="sr-only">Menu</SheetTitle>
-        <nav aria-label="Navigation mobile" className="mt-20 px-6">
-          <ul className="flex flex-col gap-2">
-            {NAV_LINKS.map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} onClick={() => setOpen(false)} className="block py-3 text-2xl font-semibold text-ink-100">
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <Link
-            href="/audit-gratuit"
-            onClick={() => setOpen(false)}
-            className="mt-8 flex min-h-12 w-full items-center justify-center rounded-md bg-secondary text-base font-semibold text-secondary-foreground"
-          >
-            Audit gratuit
-          </Link>
-        </nav>
-      </SheetContent>
-    </Sheet>
-  );
-}
-```
-Vérifier que le bouton de fermeture du `Sheet` shadcn a un `aria-label` en français (« Fermer le menu ») ; sinon le modifier dans `components/ui/sheet.tsx` (le texte `sr-only` « Close » → « Fermer »).
-
-- [ ] **Step 5: Brancher dans `app/(site)/layout.tsx`** — ajouter `import { Header } from "@/components/site/header";` et `<Header />` juste avant `<div className="flex-1">`.
-
-- [ ] **Step 6: Tests** — Run : `npx playwright test` → Expected : PASS. **Regarder** `tests/screenshots/accueil-chromium-360.png` et `…-1440.png` et comparer avec la maquette (logo à gauche, bouton or à droite).
-
-- [ ] **Step 7: Commit** — `git add -A && git commit -m "feat: en-tête collant avec flou au défilement et menu burger"`
+- [ ] **Step 2: Implémenter** `lib/navigation.ts`, `components/site/header.tsx` (`"use client"`, logique ci-dessus avec `useGSAP`), `components/site/mobile-menu.tsx` ; brancher `<Header />` en tête du layout.
+- [ ] **Step 3:** `npx playwright test` → PASS. Regarder les captures 360 / 768 / 1440 (en-tête posé sur le Hero noir, pilule Orchidée à droite).
+- [ ] **Step 4: Commit** — `feat: en-tête transparent masqué au défilement et menu plein écran`
 
 ---
 
-### Task 10: [Claude] Pied de page et bouton WhatsApp flottant
+### Task 10: [Claude] Pied de page (nom géant) et bouton WhatsApp flottant
 
-**Maquette :** `design/banani/components/ElyonFooter.jsx`
+**Files:** Create `components/site/footer.tsx`, `components/site/whatsapp-button.tsx` · Modify `app/(site)/layout.tsx`, `playwright.config.ts`, `tests/e2e/accueil.spec.ts`
 
-**Files:**
-- Create: `components/site/footer.tsx`, `components/site/whatsapp-button.tsx`
-- Modify: `app/(site)/layout.tsx`, `tests/e2e/accueil.spec.ts`
+**Interfaces:** Consumes `siteConfig`, `buildWhatsAppLink`, `Logo`, icônes, `NAV_LINKS` · Produces `<Footer />` (`id="contact"`), `<WhatsAppButton />`
 
-**Interfaces:**
-- Consumes : `siteConfig`, `buildWhatsAppLink`, `Logo`, icônes de marques, `NAV_LINKS`
-- Produces : `<Footer />` (porte `id="contact"`), `<WhatsAppButton />`
+**Contenu** (maquette corrigée) : « Communication visuelle & digitale » · Navigation (`NAV_LINKS` + Audit gratuit) · Contact (`siteConfig.ville`, téléphone `siteConfig.telephoneAffiche` avec lien `tel:` seulement s'il n'est pas `[À CONFIRMER]`, `contact@elyoncrea.com` en `mailto:` `break-words`) · WhatsApp (lien « Écrire sur WhatsApp » en `btn-ghost text-accent` + « Réponse rapide garantie ») · réseaux (affichés seulement si `siteConfig.reseaux.*` non null) · bas : `© {new Date().getFullYear()} Elyon Créa · Libreville · Gabon` + « Mentions légales ».
 
-**Contenu (repris de la maquette, corrigé) :** logo + « Communication visuelle & digitale » + icônes Facebook/LinkedIn (affichées **seulement si** `siteConfig.reseaux.*` n'est pas null) · colonne **Navigation** (`NAV_LINKS` + « Audit gratuit ») · colonne **Contact** : `siteConfig.ville`, `siteConfig.telephoneAffiche` (lien `tel:` seulement si ce n'est pas `[À CONFIRMER]`), `contact@elyoncrea.com` (lien `mailto:`, `break-words`) · colonne **WhatsApp** : bouton « Écrire sur WhatsApp » + « Réponse rapide garantie » · bas de page : `© {année courante} Elyon Créa` (année calculée : `new Date().getFullYear()`) · lien « Mentions légales ».
+**Rendu premium :** fond `bg-canvas`, aucune bordure ; titres de colonnes `text-label text-accent` ; liens `text-ash hover:text-ink`. Puis, tout en bas, **« Elyon Créa » en lettres géantes** : `<p aria-hidden className="font-display font-normal leading-none tracking-[-0.05em] text-ink whitespace-nowrap text-[clamp(3rem,14vw,13rem)]">Elyon Créa</p>` révélé au défilement (lettres qui montent depuis un masque : `SplitText type:"chars", mask:"chars"`, `yPercent: 100`, stagger 0,03, scrub entre `top bottom` et `bottom bottom`).
+**Responsive :** colonnes `grid-cols-1 md:grid-cols-2 lg:grid-cols-4` ; `pb-28 md:pb-12` (place du bouton WhatsApp).
 
-**Responsive :** PC 4 colonnes (`lg:grid-cols-4`) · tablette 2 colonnes (`md:grid-cols-2`) · mobile 1 colonne. Bas de page : `flex-col md:flex-row`. Ajouter `pb-24` sur mobile pour que le bouton WhatsApp flottant ne cache pas le lien « Mentions légales » (`pb-24 md:pb-8`).
+**Bouton WhatsApp flottant :** `fixed bottom-4 right-4 z-40 md:bottom-6 md:right-6`, rond `size-14`, `bg-whatsapp` (vert officiel, écart assumé), icône blanche 28 px, `aria-label="Nous écrire sur WhatsApp"`, `target="_blank" rel="noopener noreferrer"` ; non rendu si `buildWhatsAppLink(...)` vaut `null` ; apparition après 1,5 s (`gsap.from` `scale: 0.6, opacity: 0`).
 
-**Bouton WhatsApp flottant :** `fixed bottom-4 right-4 z-40 md:bottom-6 md:right-6`, rond 56×56 (`size-14`), fond `bg-whatsapp`, icône blanche 28 px, `aria-label="Nous écrire sur WhatsApp"`, `target="_blank" rel="noopener noreferrer"`, lien `buildWhatsAppLink(siteConfig.whatsappNumero, siteConfig.messageWhatsAppDefaut)` ; **non rendu** si le lien est `null`. Apparition : fondu Motion après 1 s. Le bouton reste sur toutes les pages publiques, mais sur `/audit-gratuit` ajouter `pb-24` au bas du formulaire pour qu'il ne cache jamais le bouton d'envoi (tâche 25).
-
-- [ ] **Step 1: Configurer le numéro pour les tests** — dans `playwright.config.ts`, `webServer` : ajouter
-```ts
-env: { NEXT_PUBLIC_WHATSAPP_NUMBER: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "24100000000" },
-```
-
-- [ ] **Step 2: Test e2e qui échoue** — ajouter dans `tests/e2e/accueil.spec.ts` :
+- [ ] **Step 1:** `playwright.config.ts` → `webServer.env: { NEXT_PUBLIC_WHATSAPP_NUMBER: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "24100000000" }`.
+- [ ] **Step 2: Test e2e qui échoue**
 
 ```ts
 test("pied de page et bouton WhatsApp", async ({ page }) => {
@@ -1931,38 +1871,31 @@ test("pied de page et bouton WhatsApp", async ({ page }) => {
   await expect(footer).toContainText(`© ${new Date().getFullYear()} Elyon Créa`);
   await expect(footer).not.toContainText("hello@");
   const wa = page.getByRole("link", { name: "Nous écrire sur WhatsApp" });
-  await expect(wa).toBeVisible();
   await expect(wa).toHaveAttribute("href", /^https:\/\/wa\.me\/\d{8,}/);
-  // Le bouton flottant ne doit pas recouvrir le lien « Mentions légales » en bas de page.
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(600);
   const a = await wa.boundingBox();
   const b = await footer.getByRole("link", { name: "Mentions légales" }).boundingBox();
   const chevauche = a && b && a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
   expect(chevauche).toBeFalsy();
 });
 ```
-Run → FAIL.
-
-- [ ] **Step 3: Implémenter** `components/site/footer.tsx` (Server Component) et `components/site/whatsapp-button.tsx` (`"use client"` pour l'apparition Motion) selon le contenu et les règles ci-dessus, en convertissant la maquette avec les règles Banani → React. Brancher `<Footer />` après `<div className="flex-1">…</div>` et `<WhatsAppButton />` à la fin du layout.
-
-- [ ] **Step 4: Tests** — `npx playwright test` → PASS. Regarder les captures 360 / 768 / 1440 (bas de page).
-
-- [ ] **Step 5: Commit** — `git add -A && git commit -m "feat: pied de page et bouton WhatsApp flottant"`
+- [ ] **Step 3:** Implémenter, brancher dans le layout. **Step 4:** `npx playwright test` → PASS ; vérifier sur la capture 360 que le nom géant tient sur une ligne sans défilement horizontal. **Step 5:** Commit `feat: pied de page au nom géant et bouton WhatsApp flottant`.
 
 ---
 
-## Lot 4 — Les sections de la landing
+## Lot 4 — La landing premium
 
 Pour **chaque** tâche de ce lot :
-- Ouvrir la maquette indiquée et la convertir avec les **Règles de conversion Banani → React**.
-- Ajouter la section dans `app/(site)/page.tsx` **à sa place** (ordre : Hero, Stats, ProblemSolution, StackValeur, Services, Formules, Portfolio, Garantie, FAQ, CtaFinal).
-- Ajouter le test e2e indiqué dans `tests/e2e/accueil.spec.ts`, le voir échouer, implémenter, le voir passer, puis lancer **toute** la suite Playwright.
-- **Regarder** les captures `accueil-chromium-{360,768,1440}.png` et les comparer à la maquette (ordre, hiérarchie, espacements, couleurs).
-- Chaque section est un `<section aria-labelledby="<id>-titre">` dont le `<h2 id="<id>-titre">` porte le titre visible (les tests la retrouvent avec `getByRole("region", { name: <titre> })`) ; exception : Chiffres clés (`aria-label="Chiffres clés"`, pas de titre visible).
-- Commit : `feat: section <nom>`.
+- Reprendre les **textes** de la maquette Banani indiquée (corrigés selon les Global Constraints) ; appliquer les **Règles de direction artistique** (fond noir, pas de cartes, titres `text-heading-lg`/`text-display`, texte `text-body-lg`, une seule `btn-pill` par écran).
+- Ajouter la section dans `app/(site)/page.tsx` **à sa place** (Hero, Stats, ProblemSolution, StackValeur, Services, Formules, Portfolio, Garantie, FAQ, CtaFinal).
+- Écrire le test e2e indiqué, le voir échouer, implémenter, le voir passer, lancer **toute** la suite Playwright.
+- **Regarder** les captures `accueil-chromium-{360,768,1440}.png` + `accueil-reduced-*` et juger : composition aérée, hiérarchie par la taille, rien de collé, rien de coupé.
+- Effets lourds (épinglage `pin`, défilement horizontal, `scrub` long) **uniquement ≥ 1024 px** via `gsap.matchMedia()` ; en dessous : `Reveal` simples. Tout est coupé en `prefers-reduced-motion`.
+- Chaque section : `<section aria-labelledby="<id>-titre">` + `<h2 id="<id>-titre">` (sauf Chiffres clés : `aria-label="Chiffres clés"`). Espacement vertical `py-24 md:py-32 lg:py-40`, conteneur `mx-auto max-w-[1280px] px-5 md:px-10`.
+- Commit : `feat: section <nom> (premium)`.
 
-`app/(site)/page.tsx` devient (à compléter section par section) :
+`app/(site)/page.tsx` :
 
 ```tsx
 import { getFaq, getFormules, getPlaces, getRealisations } from "@/lib/content/queries";
@@ -1974,59 +1907,513 @@ export default async function AccueilPage() {
   const [formules, places, realisations, faq] = await Promise.all([
     getFormules(), getPlaces(), getRealisations(6), getFaq(),
   ]);
-  return (
-    <main id="contenu">
-      {/* sections dans l'ordre */}
-    </main>
-  );
+  return <main id="contenu">{/* sections dans l'ordre */}</main>;
 }
 ```
 
-### Task 11: [Claude] Hero — diaporama
+### Task 11: [Claude] Constellation — échantillonnage des formes (TDD) et fichier des formes
 
-**Maquette :** `design/banani/components/ElyonHero.jsx` (4 diapositives : tag, titre, titre en dégradé, sous-titre)
+**Files:**
+- Create: `lib/constellation/sample.ts`, `tests/unit/constellation-sample.test.ts`, `scripts/generate-constellation.ts`, `public/constellation/formes.json` (généré), `public/constellation/colibri.png` (copie de `design/logo/colibri.png`)
+- Modify: `package.json` (devDependencies `tsx`, `lucide-static` ; script `"constellation": "tsx scripts/generate-constellation.ts"`)
 
-**Files:** Create `lib/content/hero.ts`, `components/site/sections/hero-slideshow.tsx` · Modify `app/(site)/page.tsx`, `tests/e2e/accueil.spec.ts`
+**Interfaces:**
+- Produces :
+  - `type Pixels = { largeur: number; hauteur: number; rgba: Uint8ClampedArray | Uint8Array }`
+  - `mulberry32(graine: number): () => number` — aléatoire reproductible
+  - `couleurProche(r, g, b, palette: [number, number, number][]): number` — index de la couleur la plus proche
+  - `echantillonner(px: Pixels, n: number, alea: () => number, palette?: [number, number, number][]): Float32Array` — `n` points `[x, y, couleur]` à plat, `x,y ∈ [-1, 1]` (forme centrée, plus grand côté = 2), uniquement sur les pixels d'alpha > 128 ; `couleur` = index palette (ou 0 si pas de palette)
+  - `public/constellation/formes.json` : `{ "n": 2000, "palette": ["#A10684","#38BFCB","#EEDCE9","#C24BA8"], "formes": { "colibri": number[], "cerveau": number[], "ampoule": number[] } }` (tableaux à plat `x,y,c`, 3 décimales)
 
-**Interfaces:** Produces `HERO_SLIDES: { tag: string; titre: string; titreAccent: string; sousTitre: string; image: string; alt: string }[]` (textes exacts de la maquette, images `/images/hero/slide-{1..4}.jpg`) ; `<HeroSlideshow slides={HERO_SLIDES} />`.
+- [ ] **Step 1: Tests qui échouent** — `tests/unit/constellation-sample.test.ts`
 
-**Comportement :**
-- Défilement automatique toutes les **6 s**, transition **fondu** (`opacity`, 0,8 s) entre images empilées (`absolute inset-0`). Pause au survol et quand le focus clavier est dans le Hero. **Aucun défilement automatique** si `prefers-reduced-motion` (reste sur la diapositive 1, flèches utilisables).
-- Image 1 : `next/image` `fill` `priority` (ou `preload`) `sizes="100vw"` `className="object-cover"`. Images 2–4 : montées **seulement** après `window.load` + `requestIdleCallback` (état `imagesSuivantesPretes`), `loading="lazy"`.
-- Zoom lent sur l'image active : `scale` 1 → 1.06 sur 6 s (Motion, `transform` uniquement), désactivé en mouvement réduit.
-- Un **seul `<h1>`** : `<span className="block text-light">{titre}</span><span className="block text-gradient-brand">{titreAccent}</span>`. Révélation mot par mot (`SplitTitle as="h1"`) **seulement au premier affichage** ; changements de diapositive suivants → fondu simple du bloc texte.
-- Voile : mobile `bg-dark/85` uniforme (texte lisible), ≥ `lg` dégradé de la maquette `bg-gradient-to-r from-dark/90 via-dark/90 to-dark/50`.
-- Colibri en filigrane (SVG de la maquette) : `hidden lg:block`, `aria-hidden`, dégradé via `stop-color` = `var(--color-primary)` / `var(--color-secondary)`.
-- Boutons : « Démarrer mon projet » → `/audit-gratuit` (or, plein) ; « Voir nos réalisations » → `/realisations` (bordure claire). Mobile : `flex-col w-full`, chaque bouton `w-full min-h-12` ; ≥ `sm` : en ligne.
-- Contrôles : indicateurs = `<button aria-label="Aller à la diapositive N">` 44×44 (pastille visuelle 8 px dans une zone de 44 px) ; flèches précédent/suivant `aria-label` « Diapositive précédente » / « Diapositive suivante », 44×44. Conteneur `role="region" aria-roledescription="carrousel" aria-label="Nos expertises"` ; diapositive active `aria-live="polite"` seulement quand le défilement auto est en pause.
-- Hauteur : `min-h-[calc(100dvh-4rem)] lg:min-h-[760px]`, contenu `max-w-3xl`, conteneur `max-w-7xl mx-auto px-4 md:px-8`, `py-20`.
-- Titre : `text-[clamp(2rem,6vw,3rem)] font-bold leading-tight`.
-
-**Test e2e :**
 ```ts
-test("hero : diaporama accessible et boutons", async ({ page }) => {
-  await page.goto("/");
-  const hero = page.getByRole("region", { name: "Nos expertises" });
-  await expect(hero.getByRole("heading", { level: 1 })).toContainText("votre communication 360°");
-  await expect(hero.getByRole("link", { name: "Démarrer mon projet" })).toHaveAttribute("href", "/audit-gratuit");
-  await expect(hero.getByRole("link", { name: "Voir nos réalisations" })).toHaveAttribute("href", "/realisations");
-  await hero.getByRole("button", { name: "Diapositive suivante" }).click();
-  await expect(hero.getByRole("heading", { level: 1 })).toContainText("une identité qui marque les esprits");
-  await hero.getByRole("button", { name: "Aller à la diapositive 4" }).click();
-  await expect(hero.getByRole("heading", { level: 1 })).toContainText("de votre communication");
-  expect(await page.locator("h1").count()).toBe(1);
+import { describe, expect, it } from "vitest";
+import { couleurProche, echantillonner, mulberry32, type Pixels } from "@/lib/constellation/sample";
+
+/** Masque 10×10 en forme de L : colonne gauche (x<3) + ligne du bas (y>=7), le reste transparent. */
+function masqueL(): Pixels {
+  const largeur = 10, hauteur = 10;
+  const rgba = new Uint8ClampedArray(largeur * hauteur * 4);
+  for (let y = 0; y < hauteur; y++) for (let x = 0; x < largeur; x++) {
+    const i = (y * largeur + x) * 4;
+    const plein = x < 3 || y >= 7;
+    rgba[i] = 161; rgba[i + 1] = 6; rgba[i + 2] = 132; rgba[i + 3] = plein ? 255 : 0;
+  }
+  return { largeur, hauteur, rgba };
+}
+
+describe("mulberry32", () => {
+  it("est reproductible", () => {
+    const a = mulberry32(42), b = mulberry32(42);
+    expect([a(), a(), a()]).toEqual([b(), b(), b()]);
+  });
+});
+
+describe("couleurProche", () => {
+  it("trouve l'Orchidée et le Cyan", () => {
+    const palette: [number, number, number][] = [[161, 6, 132], [56, 191, 203]];
+    expect(couleurProche(150, 20, 120, palette)).toBe(0);
+    expect(couleurProche(60, 180, 200, palette)).toBe(1);
+  });
+});
+
+describe("echantillonner", () => {
+  it("rend n points de 3 valeurs, tous dans [-1, 1]", () => {
+    const pts = echantillonner(masqueL(), 500, mulberry32(1));
+    expect(pts.length).toBe(1500);
+    for (let i = 0; i < pts.length; i += 3) {
+      expect(Math.abs(pts[i])).toBeLessThanOrEqual(1);
+      expect(Math.abs(pts[i + 1])).toBeLessThanOrEqual(1);
+    }
+  });
+  it("ne place aucun point dans la zone transparente (coin haut droit du L)", () => {
+    const pts = echantillonner(masqueL(), 800, mulberry32(2));
+    // Après normalisation, le coin haut droit vide correspond à x > -0.35 et y < 0.35.
+    for (let i = 0; i < pts.length; i += 3) {
+      expect(pts[i] > -0.35 && pts[i + 1] < 0.35).toBe(false);
+    }
+  });
+  it("attribue l'index de couleur de la palette", () => {
+    const pts = echantillonner(masqueL(), 50, mulberry32(3), [[0, 0, 0], [161, 6, 132]]);
+    for (let i = 2; i < pts.length; i += 3) expect(pts[i]).toBe(1);
+  });
+  it("est reproductible avec la même graine", () => {
+    expect(Array.from(echantillonner(masqueL(), 20, mulberry32(7)))).toEqual(Array.from(echantillonner(masqueL(), 20, mulberry32(7))));
+  });
+  it("refuse un masque vide", () => {
+    const vide: Pixels = { largeur: 2, hauteur: 2, rgba: new Uint8ClampedArray(16) };
+    expect(() => echantillonner(vide, 10, mulberry32(1))).toThrow();
+  });
 });
 ```
+Run `npm run test` → FAIL.
+
+- [ ] **Step 2: Implémenter** — `lib/constellation/sample.ts`
+
+```ts
+export type Pixels = { largeur: number; hauteur: number; rgba: Uint8ClampedArray | Uint8Array };
+
+export function mulberry32(graine: number): () => number {
+  let a = graine >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export function couleurProche(r: number, g: number, b: number, palette: [number, number, number][]): number {
+  let meilleur = 0, distMin = Infinity;
+  palette.forEach(([pr, pg, pb], i) => {
+    const d = (r - pr) ** 2 + (g - pg) ** 2 + (b - pb) ** 2;
+    if (d < distMin) { distMin = d; meilleur = i; }
+  });
+  return meilleur;
+}
+
+export function echantillonner(px: Pixels, n: number, alea: () => number, palette?: [number, number, number][]): Float32Array {
+  const { largeur, hauteur, rgba } = px;
+  const pleins: number[] = [];
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (let y = 0; y < hauteur; y++) for (let x = 0; x < largeur; x++) {
+    if (rgba[(y * largeur + x) * 4 + 3] > 128) {
+      pleins.push(y * largeur + x);
+      if (x < minX) minX = x; if (x > maxX) maxX = x;
+      if (y < minY) minY = y; if (y > maxY) maxY = y;
+    }
+  }
+  if (pleins.length === 0) throw new Error("Masque vide : aucun pixel opaque");
+  const cx = (minX + maxX + 1) / 2, cy = (minY + maxY + 1) / 2;
+  const demiCote = Math.max(maxX - minX + 1, maxY - minY + 1) / 2;
+  const out = new Float32Array(n * 3);
+  for (let k = 0; k < n; k++) {
+    const p = pleins[Math.floor(alea() * pleins.length)];
+    const x = p % largeur, y = Math.floor(p / largeur);
+    const i = p * 4;
+    out[k * 3] = Math.max(-1, Math.min(1, (x + alea() - cx) / demiCote));
+    out[k * 3 + 1] = Math.max(-1, Math.min(1, (y + alea() - cy) / demiCote));
+    out[k * 3 + 2] = palette ? couleurProche(rgba[i], rgba[i + 1], rgba[i + 2], palette) : 0;
+  }
+  return out;
+}
+```
+Run `npm run test` → PASS.
+
+- [ ] **Step 3: Script de génération** — `npm i -D tsx lucide-static`, puis `scripts/generate-constellation.ts` :
+
+```ts
+import { readFile, writeFile, mkdir, copyFile } from "node:fs/promises";
+import sharp from "sharp";
+import { echantillonner, mulberry32, type Pixels } from "../lib/constellation/sample";
+
+const N = 2000;
+const PALETTE_HEX = ["#A10684", "#38BFCB", "#EEDCE9", "#C24BA8"]; // Orchidée, Cyan doux, Rose poudré, Orchidée claire
+const PALETTE = PALETTE_HEX.map((h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)) as [number, number, number]);
+
+async function pixelsDepuis(entree: Buffer, taille = 480): Promise<Pixels> {
+  const { data, info } = await sharp(entree, { density: 300 }).resize(taille, taille, { fit: "inside" }).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  return { largeur: info.width, hauteur: info.height, rgba: data };
+}
+
+async function iconeLucide(nom: string): Promise<Buffer> {
+  const svg = await readFile(`node_modules/lucide-static/icons/${nom}.svg`, "utf8");
+  // Trait épais et blanc pour obtenir une silhouette dense.
+  return Buffer.from(svg.replace(/stroke="currentColor"/g, 'stroke="#ffffff"').replace(/stroke-width="2"/g, 'stroke-width="2.6"'));
+}
+
+/** Couleur par position pour les formes sans couleur propre : Orchidée à gauche → Cyan à droite, touches de Rose poudré. */
+function colorierParPosition(pts: Float32Array, alea: () => number) {
+  for (let i = 0; i < pts.length; i += 3) {
+    const t = (pts[i] + 1) / 2;
+    const r = alea();
+    pts[i + 2] = r < 0.1 ? 2 : r < 0.18 ? 3 : alea() < t ? 1 : 0;
+  }
+}
+
+const arrondir = (a: Float32Array) => Array.from(a, (v) => Math.round(v * 1000) / 1000);
+
+const alea = mulberry32(2026);
+const colibri = echantillonner(await pixelsDepuis(await readFile("design/logo/colibri.png")), N, alea, PALETTE);
+const cerveau = echantillonner(await pixelsDepuis(await iconeLucide("brain")), N, alea);
+colorierParPosition(cerveau, alea);
+const ampoule = echantillonner(await pixelsDepuis(await iconeLucide("lightbulb")), N, alea);
+colorierParPosition(ampoule, alea);
+
+await mkdir("public/constellation", { recursive: true });
+await copyFile("design/logo/colibri.png", "public/constellation/colibri.png");
+await writeFile("public/constellation/formes.json", JSON.stringify({
+  n: N, palette: PALETTE_HEX,
+  formes: { colibri: arrondir(colibri), cerveau: arrondir(cerveau), ampoule: arrondir(ampoule) },
+}));
+console.log("✓ public/constellation/formes.json");
+```
+Run `npm run constellation` → `✓ public/constellation/formes.json` ; vérifier la taille (`< 120 Ko`).
+
+- [ ] **Step 4: Contrôle visuel des formes** — générer un aperçu et le regarder avec l'outil Read :
+
+```bash
+npx tsx -e "
+import { readFileSync } from 'node:fs'; import sharp from 'sharp';
+const d = JSON.parse(readFileSync('public/constellation/formes.json','utf8'));
+for (const nom of ['colibri','cerveau','ampoule']) {
+  const p = d.formes[nom]; let c = '';
+  for (let i=0;i<p.length;i+=3) c += '<circle cx=\"'+(300+p[i]*260)+'\" cy=\"'+(300+p[i+1]*260)+'\" r=\"1.6\" fill=\"'+d.palette[p[i+2]]+'\"/>';
+  await sharp(Buffer.from('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"600\"><rect width=\"600\" height=\"600\"/>'+c+'</svg>')).png().toFile('test-results/forme-'+nom+'.png');
+}"
+```
+Les 3 formes doivent être reconnaissables (colibri magenta aux plumes cyan, cerveau, ampoule). Sinon : ajuster `stroke-width`, `taille` ou `N`, régénérer.
+
+- [ ] **Step 5: Commit** — `feat: formes de la constellation (colibri, cerveau, ampoule)`
 
 ---
 
-### Task 12: [Claude] Chiffres clés — compteurs animés
+### Task 12: [Claude] Moteur de la constellation (canvas 2D)
 
-**Maquette :** `design/banani/components/ElyonStats.jsx` · **Files:** Create `components/site/sections/stats.tsx` · Modify page, test
+**Files:** Create `lib/constellation/engine.ts`, `components/site/constellation/constellation.tsx`
 
-- Données : `CHIFFRES` (`lib/content/static.ts`). `valeur === null` → afficher `[À CONFIRMER]` en `text-base` (pas de compteur) ; sinon `<Counter to={valeur} prefixe suffixe />` en `text-[clamp(1.75rem,4vw,2.25rem)] font-bold text-secondary`.
-- Grille : `grid grid-cols-2 lg:grid-cols-4` (mobile 2×2 comme prévu dans `CLAUDE.md` §8 ; tablette : 2×2 aussi si 4 colonnes débordent à 768 — vérifier la capture, sinon `md:grid-cols-4`). Séparateurs : `border-border` à droite/en bas selon la position (pas de bordure sur le dernier de chaque ligne).
-- Fond `bg-dark-card border-y border-border`, cellules `py-8 md:py-10`, libellés `text-sm text-muted-foreground`, `min-w-0 text-center`.
+**Interfaces:**
+- Consumes : `public/constellation/formes.json`
+- Produces :
+  - `type FormeId = "colibri" | "cerveau" | "ampoule"`
+  - `class ConstellationEngine` : `constructor(canvas: HTMLCanvasElement, donnees: FormesJson, options: OptionsConstellation)` ; `morph(forme: FormeId): void` ; `setDispersion(v: number): void` (0 → 1) ; `start(): void` ; `stop(): void` ; `destroy(): void`
+  - `type OptionsConstellation = { n: number; ambiance: number; centre: { x: number; y: number }; echelle: number; opacite?: number; interactif: boolean; reduit: boolean; entree: "convergence" | "immediate" }` (`centre` et `echelle` en fractions de la taille du canvas)
+  - `<Constellation forme={FormeId} dispersionAuDefilement?={false} variante="hero"|"cta" className? />` — composant client qui charge le JSON après le premier affichage et pilote le moteur
+
+**Comportement du moteur :**
+- Particules = triangles équilatéraux **au contour fin** (`lineWidth` 1 × dpr), taille 2,5–5,5 px, rotation propre lente. Couleurs = palette du JSON. En plus des `n` particules de forme : `ambiance` particules (≈ 12 %) qui dérivent librement sur tout le canvas à faible opacité (0,15–0,35).
+- Mouvement : chaque particule vise `cible = centre + point × échelle` avec un ressort amorti (`v += (cible - x) * 0.045; v *= 0.86; x += v`) + une petite oscillation propre (`sin(t·f + phase) × 1,5 px`) pour un effet vivant.
+- `entree: "convergence"` : départ en positions aléatoires sur tout le canvas, opacité 0 → 1 sur 1,2 s, les particules convergent vers le colibri.
+- `morph(forme)` : nouvelles cibles ; chaque particule part avec un léger retard aléatoire (0–0,5 s) pour une recomposition organique.
+- `setDispersion(v)` : la cible est poussée vers l'extérieur (`cible + direction_propre × v × 0,6 × taille`) et l'opacité réduite (`× (1 − 0,7 v)`).
+- Interaction (si `interactif`, pointeur fin uniquement : `matchMedia("(pointer: fine)")`) : les particules à moins de 90 px du curseur sont repoussées (force ∝ 1 − d/90).
+- Dessin optimisé : un seul `beginPath()`/`stroke()` **par couleur** (4 à 5 traits par image, pas un par particule). `dpr = Math.min(devicePixelRatio, 2)` (1,5 sous 768 px).
+- Économie : pause hors écran (`IntersectionObserver`) et onglet caché (`visibilitychange`) ; `ResizeObserver` pour le redimensionnement.
+- `reduit` : aucune boucle d'animation ; dessine une seule fois la forme `colibri` (et redessine au redimensionnement).
+
+**Paramètres par variante :**
+
+| | Hero PC (≥ 1024) | Hero mobile/tablette | CTA PC | CTA mobile |
+|---|---|---|---|---|
+| `n` | 2000 | 900 | 1400 | 700 |
+| `centre` | `{x:.7, y:.5}` | `{x:.5, y:.34}` | `{x:.72, y:.5}` | `{x:.5, y:.3}` |
+| `echelle` | 0.42 (de la plus petite dimension) | 0.4 | 0.38 | 0.36 |
+| `opacite` | 1 | 0.55 (texte lisible par-dessus) | 1 | 0.5 |
+
+- [ ] **Step 1: Écrire `lib/constellation/engine.ts`**
+
+```ts
+"use client";
+
+export type FormeId = "colibri" | "cerveau" | "ampoule";
+export type FormesJson = { n: number; palette: string[]; formes: Record<FormeId, number[]> };
+export type OptionsConstellation = {
+  n: number;
+  ambiance: number;
+  centre: { x: number; y: number };
+  echelle: number;
+  opacite?: number;
+  interactif: boolean;
+  reduit: boolean;
+  entree: "convergence" | "immediate";
+};
+
+const RAYON_SOURIS = 90;
+const RESSORT = 0.045;
+const AMORTI = 0.86;
+
+export class ConstellationEngine {
+  private ctx: CanvasRenderingContext2D;
+  private w = 0;
+  private h = 0;
+  private dpr = 1;
+  private nForme: number;
+  private total: number;
+  private x: Float32Array; private y: Float32Array;
+  private vx: Float32Array; private vy: Float32Array;
+  private ox: Float32Array; private oy: Float32Array;     // cible normalisée [-1,1] (forme) ou [0,1] (ambiance)
+  private dx: Float32Array; private dy: Float32Array;     // direction de dispersion
+  private taille: Float32Array; private rot: Float32Array; private vrot: Float32Array;
+  private phase: Float32Array; private couleur: Uint8Array; private retard: Float32Array;
+  private forme: FormeId = "colibri";
+  private dispersion = 0;
+  private t0 = 0;
+  private morphT0 = 0;
+  private raf = 0;
+  private enCours = false;
+  private visible = true;
+  private souris = { x: -1e6, y: -1e6 };
+  private io?: IntersectionObserver;
+  private ro?: ResizeObserver;
+
+  constructor(private canvas: HTMLCanvasElement, private donnees: FormesJson, private o: OptionsConstellation) {
+    this.ctx = canvas.getContext("2d")!;
+    this.nForme = Math.min(o.n, donnees.n);
+    this.total = this.nForme + o.ambiance;
+    const F = () => new Float32Array(this.total);
+    this.x = F(); this.y = F(); this.vx = F(); this.vy = F(); this.ox = F(); this.oy = F();
+    this.dx = F(); this.dy = F(); this.taille = F(); this.rot = F(); this.vrot = F(); this.phase = F(); this.retard = F();
+    this.couleur = new Uint8Array(this.total);
+    for (let i = 0; i < this.total; i++) {
+      const a = Math.random() * Math.PI * 2;
+      this.dx[i] = Math.cos(a); this.dy[i] = Math.sin(a);
+      this.taille[i] = 2.5 + Math.random() * 3;
+      this.rot[i] = Math.random() * Math.PI * 2;
+      this.vrot[i] = (Math.random() - 0.5) * 0.02;
+      this.phase[i] = Math.random() * Math.PI * 2;
+      if (i >= this.nForme) {
+        this.ox[i] = Math.random(); this.oy[i] = Math.random();
+        this.couleur[i] = Math.floor(Math.random() * donnees.palette.length);
+      }
+    }
+    this.appliquerForme("colibri");
+    this.redimensionner();
+    for (let i = 0; i < this.total; i++) {
+      if (o.entree === "convergence" && !o.reduit) {
+        this.x[i] = Math.random() * this.w; this.y[i] = Math.random() * this.h;
+      } else {
+        [this.x[i], this.y[i]] = this.cible(i, 0);
+      }
+    }
+    this.ro = new ResizeObserver(() => { this.redimensionner(); if (o.reduit) this.dessinerStatique(); });
+    this.ro.observe(canvas);
+    if (o.reduit) { this.dessinerStatique(); return; }
+    this.io = new IntersectionObserver(([e]) => { this.visible = e.isIntersecting; if (this.visible) this.start(); else this.stop(); });
+    this.io.observe(canvas);
+    document.addEventListener("visibilitychange", this.surVisibilite);
+    if (o.interactif && window.matchMedia("(pointer: fine)").matches) {
+      window.addEventListener("pointermove", this.surSouris, { passive: true });
+    }
+  }
+
+  morph(forme: FormeId) {
+    if (this.o.reduit || forme === this.forme) return;
+    this.appliquerForme(forme);
+    this.morphT0 = performance.now();
+    for (let i = 0; i < this.nForme; i++) this.retard[i] = Math.random() * 500;
+  }
+
+  setDispersion(v: number) { this.dispersion = Math.max(0, Math.min(1, v)); }
+
+  start() {
+    if (this.enCours || this.o.reduit || !this.visible || document.hidden) return;
+    this.enCours = true;
+    if (!this.t0) this.t0 = performance.now();
+    this.raf = requestAnimationFrame(this.boucle);
+  }
+
+  stop() { this.enCours = false; cancelAnimationFrame(this.raf); }
+
+  destroy() {
+    this.stop();
+    this.io?.disconnect(); this.ro?.disconnect();
+    document.removeEventListener("visibilitychange", this.surVisibilite);
+    window.removeEventListener("pointermove", this.surSouris);
+  }
+
+  private appliquerForme(forme: FormeId) {
+    this.forme = forme;
+    const pts = this.donnees.formes[forme];
+    const n = pts.length / 3;
+    for (let i = 0; i < this.nForme; i++) {
+      const k = (i % n) * 3;
+      this.ox[i] = pts[k]; this.oy[i] = pts[k + 1]; this.couleur[i] = pts[k + 2];
+    }
+  }
+
+  private redimensionner() {
+    this.dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2);
+    this.w = Math.max(1, Math.round(this.canvas.clientWidth * this.dpr));
+    this.h = Math.max(1, Math.round(this.canvas.clientHeight * this.dpr));
+    this.canvas.width = this.w; this.canvas.height = this.h;
+  }
+
+  private cible(i: number, t: number): [number, number] {
+    if (i >= this.nForme) {
+      return [this.ox[i] * this.w + Math.sin(t * 0.0002 + this.phase[i]) * 30 * this.dpr,
+              this.oy[i] * this.h + Math.cos(t * 0.00017 + this.phase[i]) * 30 * this.dpr];
+    }
+    const s = Math.min(this.w, this.h) * this.o.echelle;
+    const ecart = this.dispersion * 0.6 * Math.max(this.w, this.h);
+    return [this.o.centre.x * this.w + this.ox[i] * s + this.dx[i] * ecart,
+            this.o.centre.y * this.h + this.oy[i] * s + this.dy[i] * ecart];
+  }
+
+  private boucle = (t: number) => {
+    if (!this.enCours) return;
+    this.mettreAJour(t);
+    this.dessiner(t);
+    this.raf = requestAnimationFrame(this.boucle);
+  };
+
+  private mettreAJour(t: number) {
+    const ecoule = t - this.morphT0;
+    const r = RAYON_SOURIS * this.dpr;
+    for (let i = 0; i < this.total; i++) {
+      const [tx, ty] = this.cible(i, t);
+      const k = i < this.nForme && ecoule < this.retard[i] ? 0 : RESSORT;
+      this.vx[i] = (this.vx[i] + (tx - this.x[i]) * k) * AMORTI;
+      this.vy[i] = (this.vy[i] + (ty - this.y[i]) * k) * AMORTI;
+      const mx = this.x[i] - this.souris.x, my = this.y[i] - this.souris.y;
+      const d = Math.hypot(mx, my);
+      if (d < r && d > 0.01) {
+        const f = (1 - d / r) * 4 * this.dpr;
+        this.vx[i] += (mx / d) * f; this.vy[i] += (my / d) * f;
+      }
+      this.x[i] += this.vx[i]; this.y[i] += this.vy[i];
+      this.rot[i] += this.vrot[i];
+    }
+  }
+
+  private dessiner(t: number) {
+    const ctx = this.ctx;
+    ctx.clearRect(0, 0, this.w, this.h);
+    ctx.lineWidth = this.dpr;
+    const apparition = Math.min(1, (t - this.t0) / 1200);
+    const base = (this.o.opacite ?? 1) * apparition * (1 - 0.7 * this.dispersion);
+    this.passe(0, this.nForme, base, t);
+    this.passe(this.nForme, this.total, base * 0.3, t);
+  }
+
+  private dessinerStatique() {
+    this.ctx.clearRect(0, 0, this.w, this.h);
+    this.ctx.lineWidth = this.dpr;
+    for (let i = 0; i < this.total; i++) [this.x[i], this.y[i]] = this.cible(i, 0);
+    this.passe(0, this.nForme, this.o.opacite ?? 1, 0);
+    this.passe(this.nForme, this.total, (this.o.opacite ?? 1) * 0.3, 0);
+  }
+
+  /** Un seul tracé par couleur : 4 à 5 appels stroke() par image. */
+  private passe(debut: number, fin: number, alpha: number, t: number) {
+    const ctx = this.ctx;
+    ctx.globalAlpha = alpha;
+    this.donnees.palette.forEach((hex, c) => {
+      ctx.strokeStyle = hex;
+      ctx.beginPath();
+      for (let i = debut; i < fin; i++) {
+        if (this.couleur[i] !== c) continue;
+        const px = this.x[i] + Math.sin(t * 0.0015 + this.phase[i]) * 1.5 * this.dpr;
+        const py = this.y[i] + Math.cos(t * 0.0013 + this.phase[i]) * 1.5 * this.dpr;
+        const s = this.taille[i] * this.dpr, a = this.rot[i];
+        ctx.moveTo(px + Math.cos(a) * s, py + Math.sin(a) * s);
+        ctx.lineTo(px + Math.cos(a + 2.094) * s, py + Math.sin(a + 2.094) * s);
+        ctx.lineTo(px + Math.cos(a + 4.189) * s, py + Math.sin(a + 4.189) * s);
+        ctx.closePath();
+      }
+      ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  private surVisibilite = () => { if (document.hidden) this.stop(); else this.start(); };
+
+  private surSouris = (e: PointerEvent) => {
+    const r = this.canvas.getBoundingClientRect();
+    this.souris.x = (e.clientX - r.left) * this.dpr;
+    this.souris.y = (e.clientY - r.top) * this.dpr;
+  };
+}
+```
+Note : `morph()` laisse chaque particule immobile pendant son retard aléatoire (0–0,5 s) puis la renvoie vers sa nouvelle place : la recomposition paraît organique.
+- [ ] **Step 2: Écrire `components/site/constellation/constellation.tsx`** (`"use client"`) :
+  - `<canvas aria-hidden className="absolute inset-0 h-full w-full" />` (décoratif : le sens est porté par le texte).
+  - Chargement : `requestIdleCallback` (repli `setTimeout(…, 200)`) → `fetch("/constellation/formes.json")` → `new ConstellationEngine(…)` avec les paramètres de la variante selon `matchMedia("(min-width: 1024px)")` et `reduit = matchMedia("(prefers-reduced-motion: reduce)").matches`.
+  - `forme` change → `engine.morph(forme)` (ignoré si `reduit`).
+  - `dispersionAuDefilement` → `ScrollTrigger.create({ trigger: canvas.closest("section"), start: "top top", end: "bottom top", scrub: true, onUpdate: (s) => engine.setDispersion(s.progress) })` + parallaxe `gsap.to(canvas, { yPercent: 18, ease: "none", scrollTrigger: { …même déclencheur…, scrub: true } })`.
+  - Variante `cta` : `entree: "convergence"` déclenchée quand la section entre à l'écran (`ScrollTrigger` `once`).
+  - Nettoyage complet au démontage (`engine.destroy()`, ScrollTriggers tués).
+- [ ] **Step 3: Page de contrôle provisoire** — afficher `<Constellation forme="colibri" variante="hero" />` dans une `<section className="relative h-dvh">` sur la page d'accueil, `npm run dev`, ouvrir avec le MCP Playwright ou chrome-devtools à 1440 et 390 px : le colibri se forme, les particules réagissent à la souris (PC). Mesurer avec `performance_start_trace` (chrome-devtools) : pas de tâche longue > 50 ms répétée, ~60 images/s sur PC. Retirer la page de contrôle.
+- [ ] **Step 4:** `npm run build && npm run lint && npm run test` → OK. **Step 5:** Commit `feat: moteur de constellation de particules (canvas 2D)`.
+
+---
+
+### Task 13: [Claude] Hero plein écran — constellation + 4 messages
+
+**Contenu :** `design/banani/components/ElyonHero.jsx` (tag, titre, titre accentué, sous-titre ×4) · **Files:** Create `lib/content/hero.ts`, `components/site/sections/hero.tsx` · Modify page, test
+
+**Interfaces:** Produces `HERO_MESSAGES: { tag: string; titre: string; titreAccent: string; sousTitre: string; forme: FormeId }[]` (textes exacts de la maquette ; formes : Stratégie & Campagnes → `cerveau`, Création & Design → `ampoule`, Digital & Web → `colibri`, Intelligence Artificielle → `cerveau`) ; `<Hero messages={HERO_MESSAGES} />`.
+
+**Composition :**
+- `<section aria-labelledby="hero-titre" className="relative min-h-dvh overflow-hidden">` ; `<Constellation forme={formeCourante} dispersionAuDefilement variante="hero" />` en fond.
+- PC : texte dans la moitié gauche (`lg:max-w-[52%]`), centré verticalement ; constellation à droite. Mobile/tablette : constellation en haut (atténuée), texte en bas de l'écran (`justify-end pb-24`), dégradé noir décoratif sous le texte (`aria-hidden`, `bg-linear-to-t from-canvas via-canvas/80 to-transparent`).
+- Tag `text-label text-accent` ; **un seul `<h1 id="hero-titre">`** en `text-display` : `<span className="block">{titre}</span><span className="block text-accent">{titreAccent}</span>` ; sous-titre `text-body-lg text-mist max-w-[30rem]` ; actions : `btn-pill` « Démarrer mon projet » → `/audit-gratuit` + `btn-ghost` « Voir nos réalisations » → `/realisations` (mobile : pilule pleine largeur, lien en dessous).
+- Indicateurs : 4 boutons `aria-label="Afficher le message N"` (zone 44×44, point 8 px : actif `bg-primary`, inactifs `bg-ash/40`) ; indication « Défiler » `text-label text-ash` en bas (PC).
+
+**Animations :**
+- **Entrée** (timeline GSAP au montage) : constellation en convergence (moteur) ; tag `opacity` 0 → 1 (0,2 s) ; mots du titre qui glissent depuis le masque (`SplitTitle auDefilement={false} delay={0.35}`) ; sous-titre et actions `y: 20` → 0 (0,9 s puis 1,05 s).
+- **Messages** : rotation toutes les **7 s** ; sortie = mots qui remontent (`yPercent: -110`, 0,5 s) puis entrée du suivant ; la constellation se recompose (`morph`). Pause au survol de la section et quand le focus est dedans. Région du texte `aria-live="polite"` seulement quand la rotation est en pause.
+- **Défilement** : la constellation se disperse et descend légèrement (géré par `Constellation`) ; le bloc texte monte et s'efface (`y: -80, opacity: 0` en `scrub` de `top top` à `bottom top`, PC uniquement).
+- **Mouvement réduit** : pas de rotation automatique (les indicateurs restent utilisables), aucune animation, colibri fixe.
+
+**Test e2e :**
+```ts
+test("hero : titre unique, 4 messages et boutons", async ({ page }) => {
+  await page.goto("/");
+  const hero = page.getByRole("region", { name: /votre communication 360°/ });
+  await expect(hero.getByRole("heading", { level: 1 })).toContainText("votre communication 360°");
+  await expect(hero.getByRole("link", { name: "Démarrer mon projet" })).toHaveAttribute("href", "/audit-gratuit");
+  await expect(hero.getByRole("link", { name: "Voir nos réalisations" })).toHaveAttribute("href", "/realisations");
+  await hero.getByRole("button", { name: "Afficher le message 2" }).click();
+  await expect(page.locator("h1")).toContainText("une identité qui marque les esprits");
+  await hero.getByRole("button", { name: "Afficher le message 4" }).click();
+  await expect(page.locator("h1")).toContainText("de votre communication");
+  expect(await page.locator("h1").count()).toBe(1);
+  await expect(hero.locator("canvas")).toHaveAttribute("aria-hidden", "true");
+});
+```
+Note : le nom accessible de la région change avec le message ; le test clique avant tout changement automatique (7 s).
+
+---
+
+### Task 14: [Claude] Chiffres clés — nombres géants
+
+**Contenu :** `design/banani/components/ElyonStats.jsx` · **Files:** Create `components/site/sections/stats.tsx` · Modify page, test
+
+- Données : `CHIFFRES` (défini tâche 6 dans `lib/content/static.ts`, `valeur: null` tant que Steph n'a pas fourni les vrais chiffres).
+- Rendu : `<section aria-label="Chiffres clés">`, 4 colonnes `grid-cols-2 lg:grid-cols-4 gap-y-14`, sans séparateurs ; nombre en `text-heading-lg text-ink` (`<Counter>`) ; `valeur === null` → `[À CONFIRMER]` en `text-subheading text-ash` ; libellé `text-label text-accent mt-3`.
+- Animation : `Reveal stagger={0.12}` + compteurs.
 
 **Test e2e :**
 ```ts
@@ -2040,17 +2427,16 @@ test("chiffres clés : 4 indicateurs, aucun chiffre inventé", async ({ page }) 
   await expect(stats).not.toContainText("98");
 });
 ```
-(La section est un `<section aria-label="Chiffres clés">`.)
 
 ---
 
-### Task 13: [Claude] Problème → Solution « L'Envol 360° »
+### Task 15: [Claude] Problème → Solution (épinglé au défilement sur PC)
 
-**Maquette :** `design/banani/components/ElyonProblemSolutionV2.jsx` · **Files:** Create `components/site/sections/problem-solution.tsx` · Modify page, test
+**Contenu :** `design/banani/components/ElyonProblemSolutionV2.jsx` (tous les textes, bouton « Réserve ton offre » → `/#formules`) · **Files:** Create `components/site/sections/problem-solution.tsx` · Modify page, test
 
-- Reprendre **tous** les textes de la maquette (« Le problème », « Une image qui fait « amateur » fait fuir vos clients avant même de vous parler. », « Un seul interlocuteur », « Cohérent partout », « Du logo au goodie, la même identité forte. », bouton « Réserve ton offre » → `/#formules`, etc.).
-- Animation : colonne Problème puis colonne Solution en **apparition décalée** (`RevealGroup` stagger 0,15) ; **flèche qui se trace** entre les deux : SVG `path` avec `pathLength={1}` animé par Motion `initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }}` (0,8 s) — horizontale ≥ `lg`, verticale (rotation 90°) en dessous.
-- Responsive : ≥ `lg` 2 colonnes + flèche au centre ; < `lg` empilé.
+- Composition : bloc « Le problème » (`text-label text-accent` + titre `text-heading-lg` + texte `text-body-lg text-mist`) puis bloc « Solution — L'Envol 360° » (même structure + 2 bénéfices « Un seul interlocuteur » / « Cohérent partout » en `text-subheading` + description `text-mist`, + `btn-ghost text-accent` « Réserve ton offre »). Entre les deux : un **trait** Orchidée → Cyan (dégradé autorisé : élément décoratif de marque, `aria-hidden`, 1 px).
+- **PC (≥ 1024)** : section épinglée (`pin: true`, `end: "+=120%"`, `scrub: 0.6`) : le trait se dessine (`scaleX` 0 → 1, origine gauche) ; le problème s'efface (`opacity` 1 → 0.15, `y` → -40) ; la solution apparaît (`opacity` 0 → 1, `y` 60 → 0) à droite (grille 2 colonnes `lg:grid-cols-2 gap-24`).
+- **< 1024** : empilés, trait **horizontal** entre les deux qui se dessine (`scaleX`, `once`), `Reveal` simples.
 - `<section id="probleme" aria-labelledby="probleme-titre">`.
 
 **Test e2e :**
@@ -2064,17 +2450,15 @@ test("problème → solution", async ({ page }) => {
 
 ---
 
-### Task 14: [Claude] Pile de valeur + places restantes en temps réel
+### Task 16: [Claude] Pile de valeur + places restantes en temps réel
 
-**Maquette :** `design/banani/components/ElyonStackValeur.jsx` · **Files:** Create `components/site/sections/stack-valeur.tsx`, `components/site/sections/places-restantes.tsx` · Modify page, test
+**Contenu :** `design/banani/components/ElyonStackValeur.jsx` · **Files:** Create `components/site/sections/stack-valeur.tsx`, `components/site/sections/places-restantes.tsx` · Modify page, test
 
-**Interfaces:** Consumes `STACK_ITEMS`, `valeurTotaleStack`, `formatFCFA`, `Formule` (celle avec `slug === "envol-360"` ; à défaut celle `miseEnAvant`), `Places`, `createSupabaseBrowserClient`. Produces `<StackValeur formule={Formule | undefined} places={Places} />`, `<PlacesRestantes initial={Places} />`.
+**Interfaces:** Consumes `STACK_ITEMS`, `valeurTotaleStack` (tâche 6), `formatFCFA`, `Formule` (`slug === "envol-360"`, à défaut `miseEnAvant`), `Places` (`{ total, restantes }`), `createSupabaseBrowserClient`, `mapPlaces`. Produces `<StackValeur formule={Formule | undefined} places={Places} />`, `<PlacesRestantes initial={Places} />`, `usePlacesTempsReel(initial: Places): Places`.
 
-- Liste : chaque ligne = coche (icône `Check` dans pastille `bg-secondary/15`) + libellé (`min-w-0`) + valeur `formatFCFA` en `text-secondary whitespace-nowrap`. **Coches qui apparaissent une à une** (`RevealGroup` stagger 0,1).
-- Phrase d'intro : « Pris séparément, cet ensemble vaut près de {formatFCFA(valeurTotaleStack(STACK_ITEMS))}. »
-- Carte prix : « Valeur totale » barrée (`line-through text-ink-700`) = total calculé ; « Votre prix » = `formule.prix` formaté en deux lignes comme la maquette (« 500 000 » / « FCFA ») ; bouton « Je veux L'Envol 360° » → `/audit-gratuit`. Fond `bg-gradient-gold-card border border-secondary/40 rounded-2xl`.
-- Responsive : ≥ `lg` liste + carte côte à côte (`lg:grid-cols-[1fr_20rem]`) ; < `lg` empilés, carte en dessous, `w-full`.
-- **PlacesRestantes** (`"use client"`) : affiche `total` pastilles (pleines = restantes, vides = prises), texte « {restantes} places disponibles sur {total} » (« 1 place disponible » au singulier ; « Complet ce mois-ci » si 0). Abonnement Realtime :
+- Composition (pas de carte) : `SectionHeading` « Stack de valeur » / « Voici tout ce que contient L'Envol 360°. » / « Chaque élément résout un problème concret. Pris séparément, cet ensemble vaut près de {formatFCFA(total)}. ». Puis 6 **lignes typographiques** : libellé `text-subheading text-ink` à gauche (`min-w-0`), valeur `text-body-lg text-accent whitespace-nowrap` à droite, espacées de `py-6` (aucune bordure). Puis le **dénouement** : « Valeur totale » + total **barré** (`text-heading text-ash` avec trait `absolute` Orchidée `h-[3px]` animé `scaleX` 0 → 1) → « Votre prix » + prix en `text-display text-ink` (`formatFCFA` sur deux lignes : nombre / « FCFA » en `text-subheading text-accent`) → `btn-pill` « Je veux L'Envol 360° » → `/audit-gratuit` → places restantes.
+- Animation PC : les 6 lignes s'allument une à une au défilement (`opacity` 0.15 → 1, `scrub`, stagger) ; la rature se trace, puis le prix monte depuis un masque. Mobile : `Reveal stagger`.
+- **PlacesRestantes** (`"use client"`, `aria-live="polite"`) : `total` points de 10 px (disponibles = `bg-accent`, pris = contour `border border-ash/50`) + texte « {restantes} places disponibles sur {total} » (« 1 place disponible sur {total} » au singulier, « Complet ce mois-ci » si 0) en `text-label text-accent` + « Places limitées ce mois-ci » en `text-label text-ash`. Abonnement Realtime :
 
 ```tsx
 "use client";
@@ -2097,135 +2481,128 @@ export function usePlacesTempsReel(initial: Places): Places {
   return places;
 }
 ```
-Le texte des places est dans un `aria-live="polite"`. Si `formule` est `undefined` (aucune formule publiée), masquer la carte prix mais garder la liste.
+Si `formule` est `undefined`, masquer le dénouement mais garder la liste.
 
 **Test e2e :**
 ```ts
 test("pile de valeur : total calculé et places restantes", async ({ page }) => {
   await page.goto("/");
   const section = page.getByRole("region", { name: /tout ce que contient L'Envol 360°/ });
-  await expect(section).toContainText("990 000 FCFA");
+  await expect(section).toContainText("990 000 FCFA");
   await expect(section.getByText(/places? disponibles? sur \d+|Complet ce mois-ci/)).toBeVisible();
   await expect(section.getByRole("link", { name: "Je veux L'Envol 360°" })).toHaveAttribute("href", "/audit-gratuit");
 });
 ```
-**Vérification manuelle du temps réel** (à faire une fois et à noter dans le rapport) : page ouverte, exécuter via MCP `execute_sql` `update places set restantes = 3 where id = 1;` → le chiffre change sans recharger ; remettre `restantes = 4`.
+**Vérification manuelle du temps réel** (à noter dans le rapport) : page ouverte, `update places set restantes = 3 where id = 1;` (MCP Supabase `execute_sql`) → le chiffre change sans recharger ; remettre 4.
 
 ---
 
-### Task 15: [Claude] Expertise — 11 pôles de services
+### Task 17: [Claude] Expertise — 11 pôles en liste numérotée dépliable
 
-**Maquette :** `design/banani/components/ElyonServicesDetailed.jsx` · **Files:** Create `lib/content/services.ts`, `components/site/sections/services.tsx` · Modify page, test · `npx shadcn@latest add popover`
+**Contenu :** `design/banani/components/ElyonServicesDetailed.jsx` · **Files:** Create `lib/content/services.ts`, `components/site/sections/services.tsx` · Modify page, test
 
-**Interfaces:** Produces `POLES: { icone: LucideIcon; couleur: "magenta" | "gold"; titre: string; sousTitre?: string; prestations: { label: string; description: string }[] }[]` — **recopier exactement** les 11 pôles, sous-titres, prestations et descriptions de la maquette (`#C2147A` → `"magenta"`, `#F9B000` → `"gold"`, icônes Lucide correspondantes : `Lightbulb`, `PenTool`, `Monitor`, …).
+**Interfaces:** Produces `POLES: { titre: string; sousTitre?: string; prestations: { label: string; description: string }[] }[]` — **recopier exactement** les 11 pôles, sous-titres, prestations et descriptions de la maquette (couleurs et icônes de la maquette abandonnées).
 
-- `<section id="services">`, fond `bg-light`, `SectionHeading tone="light"` : « Notre expertise » / « Une agence 360°, un seul partenaire. » / « De la stratégie à la mesure des résultats, nous couvrons l'intégralité de votre communication. »
-- Cartes : `grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5` ; carte blanche `bg-background border border-light-card rounded-xl p-6`, numéro `01…11` en haut à droite, icône dans pastille teintée (`bg-primary/10 text-primary` ou `bg-secondary/10 text-secondary`), trait coloré, liste des prestations.
-- **Infobulles accessibles** (remplacent le survol CSS de la maquette, inutilisable au doigt) : chaque prestation est un `<button type="button">` (zone ≥ 44 px de haut via `py-2.5`) qui ouvre un `Popover` shadcn (`side="top"`, `collisionPadding={16}`, largeur `w-[min(270px,calc(100vw-2rem))]`) au clic/tap/Entrée ; sur PC il s'ouvre aussi au survol (`onMouseEnter`/`onMouseLeave` contrôlant `open`, uniquement si `matchMedia("(hover: hover)")`). Contenu : trait coloré, libellé en gras, description. Fond `bg-dark text-ink-200`.
-- Animation : **apparition en cascade** (`RevealGroup` / `RevealItem`) ; **carte qui se soulève au survol** : `transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg`.
+- `<section id="services">`, `SectionHeading` « Notre expertise » / « Une agence 360°, un seul partenaire. » / « De la stratégie à la mesure des résultats, nous couvrons l'intégralité de votre communication. »
+- **Liste** (pas de cartes) : `Accordion` shadcn `type="multiple"` restylé. Chaque pôle = déclencheur pleine largeur : numéro `01`…`11` en `text-label text-accent` + titre en `text-heading text-ink` (+ sous-titre `text-label text-ash`) + icône `Plus` qui tourne de 45° à l'ouverture (`transform`). Séparation par l'espace (`py-8`) ; au survol PC, le titre glisse de 12 px (`translate-x-3`) et passe en Cyan.
+- Contenu déplié : prestations en grille `md:grid-cols-2 gap-x-16 gap-y-6` : libellé `text-subheading text-ink`, description `text-body-lg text-mist`.
+- Le titre de chaque pôle est un `<h3>` à l'intérieur du déclencheur (vérifier axe).
+- Animation : titres en cascade (`Reveal stagger={0.06}`) ; quelques triangles d'ambiance décoratifs (SVG statique `aria-hidden`, Orchidée/Cyan à 20 % d'opacité) qui dérivent en parallaxe lente sur PC.
 
 **Test e2e :**
 ```ts
-test("expertise : 11 pôles et infobulle au clic", async ({ page }) => {
+test("expertise : 11 pôles dépliables", async ({ page }) => {
   await page.goto("/");
   const section = page.locator("#services");
   await expect(section.getByRole("heading", { level: 3 })).toHaveCount(11);
-  await section.getByRole("button", { name: "Audit de marque" }).click();
-  await expect(page.getByRole("dialog")).toContainText("Analyse complète de votre image");
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog")).toHaveCount(0);
+  const pole = section.getByRole("button", { name: /Conseil & Stratégie/ });
+  await pole.click();
+  await expect(pole).toHaveAttribute("aria-expanded", "true");
+  await expect(section.getByText("Analyse complète de votre image")).toBeVisible();
 });
 ```
 
 ---
 
-### Task 16: [Claude] Formules (prix lus dans Supabase)
+### Task 18: [Claude] Formules — prix géants, Envol 360° au centre
 
-**Maquette :** `design/banani/components/ElyonFormules.jsx` · **Files:** Create `components/site/sections/formules.tsx` · Modify page, test
+**Contenu :** `design/banani/components/ElyonFormules.jsx` · **Files:** Create `components/site/sections/formules.tsx` · Modify page, test
 
-**Interfaces:** Consumes `Formule[]`, `prixAffiche`. Produces `<Formules formules={Formule[]} />`.
+**Interfaces:** Consumes `Formule[]`, `prixAffiche` (tâche 6). Produces `<Formules formules={Formule[]} />`.
 
-- `<section id="formules">`, fond `bg-gradient-formules`, lueurs décoratives de la maquette en `absolute pointer-events-none aria-hidden` avec `max-w-full` (elles ne doivent **jamais** élargir la page : conteneur `relative overflow-hidden` sur la **section**, pas sur `body`).
-- Cartes : ≥ `xl` 3 colonnes `items-start` ; < `xl` 1 colonne `max-w-md mx-auto`, **la carte `miseEnAvant` en premier** (`order-first xl:order-none`).
-- Carte mise en avant : badge « Le plus choisi » (icône `Star`) centré en haut, fond `bg-gradient-gold-card`, **bordure en dégradé animée** : pseudo-élément avec `conic-gradient` qui tourne (rotation `transform` d'un calque `absolute inset-[-1px]` derrière la carte, `animation: spin 6s linear infinite`, coupée en mouvement réduit par la règle globale).
-- Prix : `prixAffiche(f)` en `text-3xl font-bold whitespace-nowrap` ; `prixNote` dessous ; `accroche`, `description`, trait, liste des `avantages` avec coches, bouton `cta` → `/audit-gratuit` (plein or pour la carte mise en avant, contour sinon).
-- Liste vide (aucune formule publiée) → ne pas rendre la section.
+- `<section id="formules">`, `SectionHeading align="center"` « Formules & Tarifs » / « Choisissez la formule qui vous fait décoller. » / texte de la maquette.
+- **≥ 1280 px** : 3 colonnes `xl:grid-cols-3 gap-16`, **sans cadre** ; la formule `miseEnAvant` au centre. **< 1280 px** : 1 colonne `max-w-xl mx-auto gap-24`, `miseEnAvant` **en premier** (`order-first xl:order-none`).
+- Colonne : nom `text-label text-accent` ; prix `prixAffiche(f)` en `text-heading-lg text-ink whitespace-nowrap` (« Sur devis » + `notePrix` `text-mist`) ; `accroche` `text-subheading` ; `description` `text-body-lg text-mist` ; avantages en liste `text-body-lg` avec petit triangle Cyan comme puce ; action : `btn-pill` **uniquement** pour la formule mise en avant, `btn-ghost` pour les autres. Étiquette « Le plus choisi » : `text-label text-accent` avec étoile, au-dessus du nom (pas de badge plein).
+- Profondeur : halo décoratif Prune nuit derrière la colonne centrale (`aria-hidden`, `radial-gradient` vers transparent — décor de marque, pas un composant) ; PC : la colonne centrale monte plus vite au défilement (`y: -60` en `scrub`), les deux autres plus lentement (`y: -20`).
+- Liste vide → section non rendue.
 
 **Test e2e :**
 ```ts
-test("formules : 3 cartes depuis Supabase, carte mise en avant", async ({ page }, testInfo) => {
+test("formules : 3 offres depuis Supabase, Envol 360° mis en avant", async ({ page }, testInfo) => {
   await page.goto("/");
   const section = page.locator("#formules");
   await expect(section.getByRole("heading", { level: 3 })).toHaveCount(3);
   await expect(section.getByText("Le plus choisi")).toBeVisible();
-  await expect(section).toContainText("500 000 FCFA");
+  await expect(section).toContainText("500 000 FCFA");
   await expect(section).toContainText("Sur devis");
   const width = testInfo.project.use.viewport?.width ?? 1280;
-  if (width < 1280) {
-    const premiere = section.getByRole("heading", { level: 3 }).first();
-    await expect(premiere).toHaveText("Envol 360°");
-  }
+  if (width < 1280) await expect(section.getByRole("heading", { level: 3 }).first()).toHaveText("Envol 360°");
 });
 ```
 
 ---
 
-### Task 17: [Claude] Réalisations (aperçu, 6 projets)
+### Task 19: [Claude] Réalisations — défilement horizontal (6 projets)
 
-**Maquette :** `design/banani/components/ElyonPortfolio.jsx` · **Files:** Create `components/site/realisations/realisation-card.tsx`, `components/site/sections/portfolio.tsx` · Modify page, test
+**Contenu :** `design/banani/components/ElyonPortfolio.jsx` · **Files:** Create `scripts/generate-placeholders.mjs`, `public/images/placeholders/realisation-{1..6}.jpg`, `components/site/realisations/realisation-card.tsx`, `components/site/sections/portfolio.tsx` · Modify page, test
 
-**Interfaces:** Produces `<RealisationCard realisation={Realisation} priority?={false} avecDescription?={false} />` (rendue dans un `<article>` ; `avecDescription` affiche `realisation.description` sous le titre — utilisé tâche 26), `<Portfolio realisations={Realisation[]} />`.
+**Interfaces:** Produces `<RealisationCard realisation={Realisation} index={number} priority?={false} avecDescription?={false} />` (`<article>` ; image = `realisation.imageUrl`, et si c'est `REALISATION_PLACEHOLDER` (tâche 6) → `/images/placeholders/realisation-{(index % 6) + 1}.jpg` pour varier ; `avecDescription` utilisé tâche 26), `<Portfolio realisations={Realisation[]} />`.
 
-- Fond `bg-light`, `SectionHeading tone="light"` : « Réalisations » / « Des résultats qui parlent d'eux-mêmes » / « Découvrez une sélection de projets livrés pour des marques gabonaises et panafricaines. »
-- Grille `grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6`. Carte : image `aspect-[4/3]` `next/image` `fill` `sizes="(min-width:1280px) 33vw, (min-width:768px) 50vw, 100vw"`, **zoom au survol** (`group-hover:scale-105 transition-transform duration-500` dans un conteneur `overflow-hidden`), badge résultat or en bas à gauche, catégorie magenta, titre `h3`.
-- Bouton « Voir tous nos projets » → `/realisations`.
-- Liste vide → ne pas rendre la section.
+- **Images provisoires** (style « procédural » du guide, pas de photos inventées) : `scripts/generate-placeholders.mjs` génère avec `sharp` 6 images 1600×1200 : fond noir, halo Prune nuit, nuée de petits triangles Orchidée/Cyan disposés différemment (graine différente par image), mention discrète « Projet à venir » ; `jpeg({ quality: 72, mozjpeg: true })` ; plus `realisation.jpg` (copie de la n° 1, chemin `REALISATION_PLACEHOLDER`). Run `node scripts/generate-placeholders.mjs` → 7 `✓`.
+- Carte (sans cadre) : image `aspect-[4/3] rounded-[24px] overflow-hidden` (`next/image` `fill`, `sizes="(min-width:1024px) 40vw, 85vw"`), **parallaxe interne** (image à 115 % de hauteur qui glisse de -8 % à 8 % au défilement, PC) ; dessous : catégorie `text-label text-accent`, titre `h3 text-subheading text-ink`, résultat `text-mist` s'il existe.
+- `SectionHeading` « Réalisations » / « Des résultats qui parlent d'eux-mêmes » / texte de la maquette ; lien `btn-ghost` « Voir tous nos projets » → `/realisations`.
+- **PC (≥ 1024)** : piste horizontale `data-allow-overflow` (`flex gap-10`, cartes `w-[40vw] max-w-[560px] shrink-0`) épinglée : `gsap.to(piste, { x: () => -(piste.scrollWidth - window.innerWidth + marge), ease: "none", scrollTrigger: { trigger: section, pin: true, scrub: 0.8, end: () => "+=" + piste.scrollWidth, invalidateOnRefresh: true } })`.
+- **< 1024** : carrousel tactile `overflow-x-auto snap-x snap-mandatory` (`data-allow-overflow`, cartes `w-[85%] snap-center`) + 6 points indicateurs (`button` 44×44, `aria-label="Voir le projet N"`, actif `bg-primary`) synchronisés par `IntersectionObserver`.
+- Liste vide → section non rendue.
 
 **Test e2e :**
 ```ts
-test("réalisations : 6 projets, aucun client inventé", async ({ page }) => {
+test("réalisations : 6 projets, aucun client inventé, titres non coupés", async ({ page }) => {
   await page.goto("/");
   const section = page.getByRole("region", { name: "Des résultats qui parlent d'eux-mêmes" });
   await expect(section.getByRole("heading", { level: 3 })).toHaveCount(6);
   for (const faux of ["Moov Africa", "TotalEnergies", "Total Energies", "BGFI", "SEEG", "Savane Mode", "Gabon Oil"]) {
     await expect(section).not.toContainText(faux);
   }
+  // La piste est exclue du contrôle global : vérifier ici que les titres tiennent dans leur carte.
+  const coupes = await section.getByRole("heading", { level: 3 }).evaluateAll((els) => els.filter((e) => e.scrollWidth > e.clientWidth + 1).length);
+  expect(coupes).toBe(0);
   await expect(section.getByRole("link", { name: "Voir tous nos projets" })).toHaveAttribute("href", "/realisations");
 });
 ```
 
 ---
 
-### Task 18: [Claude] Garantie
+### Task 20: [Claude] Garantie + FAQ
 
-**Maquette :** `design/banani/components/ElyonGarantie.jsx` · **Files:** Create `components/site/sections/garantie.tsx` · Modify page, test
+**Contenu :** `design/banani/components/ElyonGarantie.jsx`, `design/banani/components/ElyonFAQ.jsx` · **Files:** Create `components/site/sections/garantie.tsx`, `components/site/sections/faq.tsx` · Modify page, test
 
-- Textes exacts de la maquette (« Notre engagement », « Garantie », « Satisfaction garantie », « Délai garanti », « Vous ne validez que si vous êtes fier de votre image. », …).
-- **Ligne qui se dessine** : ≥ `md` ligne **verticale** entre les 2 colonnes, `scaleY` 0 → 1 (`origin-top`, Motion `whileInView`, 0,8 s) ; < `md` blocs empilés et ligne **horizontale** `scaleX` 0 → 1 (`origin-left`).
-- `<section aria-labelledby="garantie-titre">`.
+**Garantie** (`<section aria-labelledby="garantie-titre">`) :
+- PC : 2 colonnes `lg:grid-cols-[1.3fr_auto_1fr] gap-16` : à gauche « Garantie » (`text-label text-accent`) + titre géant `text-heading-lg` « Vous ne validez que si vous êtes fier de votre image. » + « Satisfaction garantie » · « Délai garanti » en `text-label text-ash` avec icônes `ShieldCheck`/`Clock` Cyan ; au centre **ligne verticale** 1 px dégradé Orchidée → Cyan qui se dessine (`scaleY` 0 → 1, `scrub`) ; à droite « Notre engagement » + texte `text-body-lg text-mist` + offre « Le premier mois de gestion de vos réseaux vous est offert… » en `text-subheading text-accent` (icône `Gift`).
+- < 1024 : empilé, ligne **horizontale** (`scaleX`).
 
-**Test e2e :**
+**FAQ** (`<section aria-labelledby="faq-titre">`, données Supabase) :
+- `SectionHeading` « FAQ » / « Questions fréquentes ». Accordéon shadcn `type="single" collapsible defaultValue` = 1re question ; questions en `text-subheading text-ink` (dans un `<h3>`), icône `Plus` qui tourne à 45° ; réponses `text-body-lg text-mist max-w-3xl`. Aucune boîte ni bordure : séparation par `py-7`.
+- Données structurées `FAQPage` en `<script type="application/ld+json">`. Liste vide → section non rendue.
+
+**Tests e2e :**
 ```ts
 test("garantie", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("Satisfaction garantie")).toBeVisible();
   await expect(page.getByText("Délai garanti")).toBeVisible();
 });
-```
 
----
-
-### Task 19: [Claude] FAQ (questions lues dans Supabase)
-
-**Maquette :** `design/banani/components/ElyonFAQ.jsx` · **Files:** Create `components/site/sections/faq.tsx` · Modify page, test
-
-- Composant shadcn `Accordion type="single" collapsible defaultValue={première question}`. Style de la maquette : fond `bg-light`, items `rounded-lg border bg-background p-6`, item ouvert `border-accent-magenta`, pastille ronde `+`/`−` (icônes `Plus`/`Minus`, ouverte = `bg-accent-magenta text-white`). Animation d'ouverture : celle de shadcn (`data-[state=open]:animate-accordion-down`) — elle anime la hauteur ; acceptable car le contenu en dessous se déplace suite à une action de l'utilisateur (pas de CLS).
-- Questions en `h3` dans le déclencheur (`AccordionTrigger` contient un `<h3>` ou utiliser l'option `asChild` selon la version shadcn) — vérifier qu'axe ne signale rien.
-- Données structurées SEO : ajouter un `<script type="application/ld+json">` `FAQPage` généré à partir de `faq`.
-- Liste vide → ne pas rendre la section.
-
-**Test e2e :**
-```ts
 test("FAQ : accordéon", async ({ page }) => {
   await page.goto("/");
   const section = page.getByRole("region", { name: "Questions fréquentes" });
@@ -2238,13 +2615,13 @@ test("FAQ : accordéon", async ({ page }) => {
 
 ---
 
-### Task 20: [Claude] CTA final (audit gratuit)
+### Task 21: [Claude] CTA final (colibri qui se reforme) + finitions SEO et performance
 
-**Maquette :** `design/banani/components/ElyonCTAFinal.jsx` · **Files:** Create `components/site/sections/cta-final.tsx` · Modify page, test
+**Contenu :** `design/banani/components/ElyonCTAFinal.jsx` · **Files:** Create `components/site/sections/cta-final.tsx`, `app/sitemap.ts`, `app/robots.ts`, `app/opengraph-image.png` · Modify page, test
 
-- Textes de la maquette **corrigés** : réassurance « Sans engagement · Réponse sous 24h ouvrables » (au lieu de 48h) ; paragraphe « … En 48h, on vous montre … » → **demander à Steph s'il garde « En 48h » pour la livraison de l'audit** (ce n'est pas le délai de réponse) ; en attendant écrire « Rapidement, on vous montre ce qui vous fait perdre des clients — et comment le corriger. »
-- Boutons : « Recevoir mon audit gratuit » → `/audit-gratuit` (or) ; « Découvrir L'Envol 360° » → `/#formules` (contour magenta). Mobile : empilés pleine largeur.
-- **Fond en dégradé qui bouge lentement** : calque `absolute inset-0` portant le dégradé `bg-gradient-cta` + un second calque radial magenta qui se translate lentement (`transform: translate`, 20 s, `ease-in-out`, aller-retour infini, coupé en mouvement réduit). Section `relative overflow-hidden`.
+**CTA final** (`<section aria-labelledby="cta-titre" className="relative min-h-dvh overflow-hidden">`) :
+- `<Constellation forme="colibri" variante="cta" />` (le colibri se reforme quand la section arrive à l'écran).
+- Texte (moitié gauche PC, en bas sur mobile) : « CTA Final » remplacé par un surtitre utile « Audit gratuit » (`text-label text-accent`) ; titre `text-display` « Prêt à faire décoller votre marque ? » (`SplitTitle`) ; paragraphe de la maquette **corrigé** : « Commencez par un audit gratuit de votre image. Rapidement, on vous montre ce qui vous fait perdre des clients — et comment le corriger. » (**demander à Steph** s'il souhaite garder « En 48h » pour la livraison de l'audit) ; `btn-pill` « Recevoir mon audit gratuit » → `/audit-gratuit` ; `btn-ghost` « Découvrir L'Envol 360° » → `/#formules` ; réassurance « Sans engagement · Réponse sous 24h ouvrables » en `text-label text-ash`.
 
 **Test e2e :**
 ```ts
@@ -2252,59 +2629,31 @@ test("CTA final : délai harmonisé", async ({ page }) => {
   await page.goto("/");
   const cta = page.getByRole("region", { name: "Prêt à faire décoller votre marque ?" });
   await expect(cta).toContainText("Réponse sous 24h ouvrables");
-  await expect(cta).not.toContainText("Réponse sous 48h");
+  await expect(cta).not.toContainText("48h");
   await expect(cta.getByRole("link", { name: "Recevoir mon audit gratuit" })).toHaveAttribute("href", "/audit-gratuit");
 });
 ```
 
----
-
-### Task 21: [Claude] Finitions de la landing : SEO, performance mobile ≥ 90
-
-**Files:** Create `app/sitemap.ts`, `app/robots.ts`, `app/opengraph-image.jpg` (copie de `public/images/hero/slide-1.jpg` redimensionnée 1200×630 avec sharp) · Modify `app/(site)/page.tsx` (métadonnées), `tests/e2e/accueil.spec.ts`
-
-- [ ] **Step 1:** `app/sitemap.ts`
-
-```ts
-import type { MetadataRoute } from "next";
-import { siteConfig } from "@/lib/site-config";
-
-export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ["", "/audit-gratuit", "/realisations", "/mentions-legales"];
-  return pages.map((p) => ({ url: `${siteConfig.url}${p}`, lastModified: new Date(), changeFrequency: "weekly", priority: p === "" ? 1 : 0.7 }));
-}
-```
-`app/robots.ts`
-```ts
-import type { MetadataRoute } from "next";
-import { siteConfig } from "@/lib/site-config";
-
-export default function robots(): MetadataRoute.Robots {
-  return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/admin", "/connexion", "/api/"] }],
-    sitemap: `${siteConfig.url}/sitemap.xml`,
-  };
-}
-```
-
-- [ ] **Step 2:** Données structurées `ProfessionalService` (nom, ville Libreville, pays GA, e-mail, url) dans `app/(site)/page.tsx` via `<script type="application/ld+json">`.
-
-- [ ] **Step 3: Mesure Lighthouse mobile**
+**Finitions :**
+- [ ] `app/sitemap.ts` (pages `""`, `/audit-gratuit`, `/realisations`, `/mentions-legales`) et `app/robots.ts` (`disallow: ["/admin", "/connexion", "/api/"]`, lien du sitemap) à partir de `siteConfig.url`.
+- [ ] Données structurées `ProfessionalService` (nom, Libreville, GA, e-mail, url) dans `app/(site)/page.tsx`.
+- [ ] `app/opengraph-image.png` 1200×630 généré avec sharp : fond noir, colibri en points (depuis `formes.json`), « Elyon Créa » en Manrope blanc rosé.
+- [ ] **Lighthouse mobile** :
 
 ```bash
 npm run build && npm run start &
 npx lighthouse http://localhost:3000 --only-categories=performance,accessibility,seo --output=json --output-path=./test-results/lighthouse-accueil.json --chrome-flags="--headless=new" --quiet
-node -e "const r=require('./test-results/lighthouse-accueil.json');for(const[k,v]of Object.entries(r.categories))console.log(k,Math.round(v.score*100));console.log('LCP',r.audits['largest-contentful-paint'].displayValue,'CLS',r.audits['cumulative-layout-shift'].displayValue)"
+node -e "const r=require('./test-results/lighthouse-accueil.json');for(const[k,v]of Object.entries(r.categories))console.log(k,Math.round(v.score*100));console.log('LCP',r.audits['largest-contentful-paint'].displayValue,'CLS',r.audits['cumulative-layout-shift'].displayValue,'TBT',r.audits['total-blocking-time'].displayValue)"
 ```
-Expected : performance ≥ 90, CLS < 0,1. Sinon : utiliser le skill `chrome-devtools-mcp:debug-optimize-lcp` (trace + analyse LCP), corriger (image du Hero en priorité, JS GSAP chargé trop tôt, polices…), remesurer. Arrêter le serveur ensuite.
-
-- [ ] **Step 4:** Suite complète `npm run build && npm run lint && npm run test && npx playwright test` → PASS. Regarder **toutes** les captures de l'accueil (7 largeurs + iPhone + mouvement réduit).
-
-- [ ] **Step 5:** Commit `feat: SEO et performance de la landing` — inscrire le score Lighthouse dans `TACHES.md`.
+Expected : performance ≥ 90, CLS < 0,1. Sinon : skill `chrome-devtools-mcp:debug-optimize-lcp` ; pistes : retarder davantage la constellation, réduire `n` sur mobile, charger GSAP/SplitText en différé, sous-ensembles de polices. Arrêter le serveur.
+- [ ] Suite complète `npm run build && npm run lint && npm run test && npx playwright test` → PASS ; regarder **toutes** les captures de l'accueil (7 largeurs + iPhone + mouvement réduit).
+- [ ] Commit `feat: CTA final, SEO et performance de la landing` — inscrire le score Lighthouse dans `TACHES.md`.
 
 ---
 
 ## Lot 5 — Formulaire « Audit gratuit »
+
+> **Révision du 2026-11-21 (direction artistique premium)** : les classes et styles Banani cités dans ce lot sont à traduire avec le tableau « Correspondance des anciennes classes Banani » (Règles de direction artistique). Fond noir, aucune carte ; une seule `btn-pill` par écran ; champs en `border-line rounded-[12px] bg-transparent text-ink`, texte ≥ 16 px. Pages : la première section commence par `pt-32 md:pt-40` (en-tête fixe).
 
 ### Task 22: [Claude] Règles du formulaire (Zod) — TDD
 
@@ -3227,6 +3576,8 @@ Run → FAIL.
 
 ## Lot 6 — Autres pages et connexion
 
+> **Révision du 2026-11-21 (direction artistique premium)** : les classes et styles Banani cités dans ce lot sont à traduire avec le tableau « Correspondance des anciennes classes Banani » (Règles de direction artistique). Fond noir, aucune carte ; une seule `btn-pill` par écran ; champs en `border-line rounded-[12px] bg-transparent text-ink`, texte ≥ 16 px. Pages : la première section commence par `pt-32 md:pt-40` (en-tête fixe).
+
 ### Task 26: [Claude] Page Réalisations (filtre par catégorie)
 
 **Maquettes :** `design/banani/screens/ElyonRealisations.jsx`, `design/banani/components/ElyonRealisationsPage.jsx`
@@ -3711,27 +4062,27 @@ Une tâche est cochée seulement quand build, lint, tests et tests Playwright pa
 - [ ] 10. [Claude] Lire le contenu depuis Supabase (tâche 6)
 - [ ] 11. [Steph] Créer le compte Resend (tâche 7)
 
-## Étape 1 · Lot 3 — Cadre du site
-- [ ] 12. [Claude] Animations, logo, images provisoires (tâche 8)
-- [ ] 13. [Claude] En-tête collant + menu burger (tâche 9)
-- [ ] 14. [Claude] Pied de page + bouton WhatsApp (tâche 10)
+## Étape 1 · Lot 3 — Cadre du site (nouveau design premium)
+- [ ] 12. [Claude] Couleurs de la charte, polices Manrope + Inter, outils d'animation (tâche 8)
+- [ ] 13. [Claude] En-tête transparent + menu plein écran (tâche 9)
+- [ ] 14. [Claude] Pied de page au nom géant + bouton WhatsApp (tâche 10)
 
-## Étape 1 · Lot 4a — Landing (haut de page)
-- [ ] 15. [Claude] Diaporama du Hero (tâche 11)
-- [ ] 16. [Claude] Chiffres clés animés (tâche 12)
-- [ ] 17. [Claude] Problème → Solution (tâche 13)
-- [ ] 18. [Claude] Pile de valeur + places en temps réel (tâche 14)
+## Étape 1 · Lot 4a — Landing : la constellation
+- [ ] 15. [Claude] Formes de la constellation : colibri, cerveau, ampoule (tâche 11)
+- [ ] 16. [Claude] Moteur de particules (tâche 12)
+- [ ] 17. [Claude] Hero plein écran avec les 4 messages (tâche 13)
 
-## Étape 1 · Lot 4b — Landing (offre)
-- [ ] 19. [Claude] 11 pôles d'expertise (tâche 15)
-- [ ] 20. [Claude] Formules (tâche 16)
-- [ ] 21. [Claude] Réalisations (aperçu) (tâche 17)
+## Étape 1 · Lot 4b — Landing : le message
+- [ ] 18. [Claude] Chiffres clés géants (tâche 14)
+- [ ] 19. [Claude] Problème → Solution (tâche 15)
+- [ ] 20. [Claude] Ce que contient l'offre + places en temps réel (tâche 16)
 
-## Étape 1 · Lot 4c — Landing (bas de page)
-- [ ] 22. [Claude] Garantie (tâche 18)
-- [ ] 23. [Claude] FAQ (tâche 19)
-- [ ] 24. [Claude] Appel à l'action final (tâche 20)
-- [ ] 25. [Claude] Référencement Google + vitesse mobile ≥ 90 (tâche 21)
+## Étape 1 · Lot 4c — Landing : l'offre et la fin
+- [ ] 21. [Claude] 11 pôles d'expertise dépliables (tâche 17)
+- [ ] 22. [Claude] Formules (tâche 18)
+- [ ] 23. [Claude] Réalisations en défilement horizontal (tâche 19)
+- [ ] 24. [Claude] Garantie + FAQ (tâche 20)
+- [ ] 25. [Claude] Appel final + Google + vitesse mobile ≥ 90 (tâche 21)
 
 ## Étape 1 · Lot 5 — Audit gratuit
 - [ ] 26. [Claude] Règles du formulaire (tâche 22)
