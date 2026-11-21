@@ -10,10 +10,10 @@
 
 | # | Sujet | Décision |
 |---|---|---|
-| 1 | Palette | **Option A — maquette Banani** : magenta `#C2147A`, or `#F9B000`, noirs `#0E0E0E` / `#161616` / `#0A0A0A`, crème `#FAF8F5`, blanc. Dégradé titre magenta → or. Police DM Sans. Rester identique à la maquette. |
+| 1 | Palette | ~~Option A — maquette Banani~~ → **révisé : charte du logo + direction artistique premium (section 4.0)**. |
 | 2 | Hébergement | **Vercel Pro**. Nom de domaine acheté chez **Cloudflare** : le DNS reste chez Cloudflare et pointe vers Vercel. |
 | 3 | Comptabilité SYSCOHADA | **Reprendre le schéma d'Iwadu Conta** dans ce projet (comptabilité autonome, 4 écrans de la maquette). Concerne l'étape 4. |
-| 4 | Hero | **Diaporama (Hero Slideshow)**, avec garde-fous de performance (section 4.2). |
+| 4 | Hero | ~~Diaporama photo~~ → **révisé : constellation de particules colibri / cerveau / ampoule (section 4.0)**. |
 | 5 | Sections / écrans optionnels | **Reporté à la Phase 2**, avec la maquette Banani sous les yeux. |
 | 6 | Mode Inspecteur | **Contrôle de conformité** : papiers administratifs, comptabilité à jour, échéances (impôts, CNSS…), rappels avant expiration. Concerne l'étape 5. |
 | 7 | Ordre de livraison | **Site vitrine d'abord**, puis back-office. |
@@ -49,7 +49,7 @@ Ordre justifié par les dépendances : la comptabilité a besoin des factures, l
 | Mentions légales | `/mentions-legales` | Texte légal (infos entreprise fournies par Steph) |
 | Connexion | `/connexion` | Connexion Supabase Auth fonctionnelle (e-mail + mot de passe, Google, Microsoft) → page protégée « Back-office en construction » (`/admin`) |
 
-**Maquettes** : exportées depuis Banani dans `design/banani/` (écrans dans `screens/`, sections dans `components/`, thème dans `style.css`).
+**Maquettes** : exportées depuis Banani dans `design/banani/` (écrans dans `screens/`, sections dans `components/`). **Depuis la révision du 2026-11-21, elles servent de référence pour le CONTENU uniquement** (textes, sections, ordre, champs) ; le design suit la section 4.0 et `design/style-guide-premium.md`. Le thème `style.css` de Banani n'est plus utilisé.
 
 **Décisions de la Phase 2 (2026-11-21)** :
 - Landing gardée **telle quelle** (12 sections). Sections non retenues : Header V1, Parcours de campagne, Grille de 8 services, Méthode, Témoignages, bloc Conversion.
@@ -66,6 +66,51 @@ Tout le back-office fonctionnel (édition du contenu, devis, factures, comptabil
 ---
 
 ## 4. Conception
+
+### 4.0 Direction artistique premium (révision validée par Steph le 2026-11-21)
+
+**Référence** : `design/style-guide-premium.md` (style « Dala ») pour la composition, la typographie, les espacements et l'esprit ; **charte du logo** (`design/logo/charte-graphique.png`) pour les couleurs et les polices ; **maquettes Banani** pour le contenu.
+
+**Tokens**
+
+| Rôle | Valeur |
+|---|---|
+| Fond de toutes les sections | Noir pur `#000000` — aucun panneau gris, aucune carte, aucune ombre, aucune bordure |
+| Texte principal et titres | Blanc rosé `#FCF8FB` |
+| Texte secondaire | `#9a9a9a` · tertiaire `#bdbdbd` · touches douces : Rose poudré `#EEDCE9` |
+| Bouton plein (un seul par écran, pilule 24 px) | Orchidée `#A10684`, texte blanc, 14 px majuscules graisse 600, interlettrage 0,025 em |
+| Accent (petits titres, liens, mots mis en valeur) | Cyan doux `#38BFCB` |
+| Profondeur (halos, dégradé du logo) | Prune nuit `#281B2A` |
+| Interdit | Orchidée en texte sur fond noir (contraste insuffisant) ; dégradés sur les composants d'interface (uniquement dans le logo et les particules) |
+
+**Typographie** : **Manrope** pour les titres (graisse 400, jamais gras ; -0,04 em dès 42 px ; échelle 24 · 27 · 36 · 42 · 48 · 78 · 113 px) ; **Inter** pour les textes (18 px graisse **200**, interligne 1,5) ; libellés et menu en Manrope 14 px graisse 600 majuscules. Sur mobile, les titres restent grands et percutants (mise en page pensée pour l'écran, retours à la ligne choisis, `clamp()` avec un minimum élevé), jamais une simple miniature du PC.
+
+**Espacements** : base 6 px (6 · 12 · 18 · 24 · 30 · 36 · 60 · 96 · 120), largeur max 1280 px, 60 à 120 px entre sections, une ou deux idées par écran.
+
+**Hero — constellation** : canvas 2D plein écran, petits triangles au contour fin (1–2 px) en Orchidée, Cyan doux et nuances (Rose poudré, Prune nuit éclaircie), + particules d'ambiance dispersées à faible opacité (inspirées du « motif digital » de la charte). Trois formes : **colibri** (échantillonné depuis `design/logo/colibri.png`), **cerveau**, **ampoule** (silhouettes SVG dessinées). Entrée : les particules convergent pour former le colibri, puis le titre se révèle mot par mot (glissement sans masquer le texte). Les 4 messages se succèdent : Stratégie & Campagnes → cerveau · Création & Design → ampoule · Digital & Web → colibri · Intelligence Artificielle → cerveau. Au défilement, la constellation se disperse (parallaxe). Sur PC, les particules s'écartent autour du curseur. ~2 500 particules sur PC, ~900 sur mobile ; pause hors écran et onglet caché ; `prefers-reduced-motion` → colibri fixe, messages sans animation. PC : titre à gauche, constellation à droite ; mobile : constellation derrière le texte.
+
+**Sections de la landing** (contenu Banani, rendu premium) :
+
+| # | Section | Rendu | Animation | Mobile |
+|---|---|---|---|---|
+| 1 | En-tête | Transparent, logo, liens 14 px majuscules gris → blanc au survol, pilule « Audit gratuit » | Se masque en descendant, réapparaît en remontant | Burger → menu plein écran, liens géants en cascade |
+| 2 | Hero | Voir ci-dessus | Voir ci-dessus | Voir ci-dessus |
+| 3 | Chiffres clés | 4 nombres géants, libellés cyan | Compteurs | 2 × 2 |
+| 4 | Problème → Solution | Deux grands blocs de texte, trait Orchidée → Cyan | Trait qui se dessine au défilement, la solution remplace le problème | Empilés, trait horizontal |
+| 5 | Pile de valeur | 6 lignes typographiques avec valeurs, total barré, prix final géant, points de places restantes (temps réel) | Lignes allumées une à une, rature animée, prix révélé | Empilé |
+| 6 | Expertise | Liste numérotée 01 → 11 de grands titres, chaque pôle se déplie (prestations + descriptions) | Cascade, particules d'ambiance | Pleine largeur, déplier au toucher |
+| 7 | Formules | 3 colonnes séparées par l'espace seul, prix géants, Envol 360° au centre (« Le plus choisi » en cyan + seul bouton plein) | Profondeur au défilement | Empilées, Envol 360° en premier |
+| 8 | Réalisations | Grandes images 24 px de rayon, défilement horizontal piloté par le défilement de la page (6 projets) | Défilement horizontal + parallaxe interne | Carrousel tactile + points |
+| 9 | Garantie | Titre géant + engagement + offre du 1er mois en cyan | Ligne verticale qui se dessine | Empilé, ligne horizontale |
+| 10 | FAQ | Questions en grandes lignes, + / −, sans boîtes | Ouverture fluide | Identique |
+| 11 | CTA final | Plein écran, « Prêt à faire décoller votre marque ? », colibri reformé | Particules qui reviennent | Colibri derrière le texte |
+| 12 | Pied de page | Liens + contact, puis « Elyon Créa » en lettres immenses | Révélation au défilement | 1 colonne |
+
+**Écarts assumés** : bouton WhatsApp flottant en vert officiel (reconnaissance) ; formules en 3 colonnes sur PC (comparaison des prix).
+
+**Animations** : GSAP + ScrollTrigger (révélations, parallaxe, épinglages, transitions) + Lenis ; uniquement `transform` et `opacity` dans les animations ; épinglages et défilement horizontal **désactivés sous 1024 px** (remplacés par des révélations simples) ; tout est coupé si `prefers-reduced-motion`.
+
+**Autres pages** (Audit gratuit, Réalisations, Mentions légales, Connexion) : même direction artistique, conçues après la landing.
 
 ### 4.1 Contenu modifiable (Supabase)
 
@@ -85,7 +130,7 @@ Tout le back-office fonctionnel (édition du contenu, devis, factures, comptabil
 
 - Pages **pré-générées** (rapides, bon référencement), **rafraîchies automatiquement toutes les 60 secondes** au plus quand le contenu change. Aucun redéploiement nécessaire.
 - **Places restantes en temps réel** : abonnement Supabase Realtime côté navigateur, sur cette seule donnée.
-- **Diaporama du Hero** : 1re image chargée en priorité (AVIF/WebP via `next/image`), images suivantes chargées après l'affichage de la page, transition en fondu (`opacity`), diaporama figé sur la 1re image si `prefers-reduced-motion`.
+- **Hero** : constellation en canvas 2D (voir section 4.0), démarrée après le premier affichage ; le titre (texte serveur) est l'élément LCP et reste visible dès le chargement.
 - Contenu fictif de la maquette remplacé par `[À CONFIRMER]` (chiffres, faux clients, faux téléphone, « © 2025 »), selon `CLAUDE.md` §10.
 
 ### 4.3 Formulaire « Audit gratuit »
@@ -161,7 +206,8 @@ Chaque action manuelle sera décrite clic par clic dans `TACHES.md` (tâches `[S
 - Mentions légales : raison sociale, RCCM, NIF, adresse, responsable de publication.
 - Textes et prix définitifs des formules, nombre de places.
 - Liste des secteurs d'activité du formulaire.
-- Vrai fichier du logo et 4 images pour le diaporama (Stratégie, Création, Digital, IA).
+- ~~Vrai fichier du logo~~ ✅ charte reçue (`design/logo/`). Idéalement un export SVG ou PNG haute définition du logo complet pour l'en-tête.
+- Images des 6 réalisations (en attendant : images libres Unsplash/Pexels marquées `[À CONFIRMER]`).
 
 ---
 
