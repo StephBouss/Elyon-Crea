@@ -50,3 +50,4 @@ node_modules
 /playwright-report/
 /playwright/.cache/
 .superpowers/
+/supabase/.temp/

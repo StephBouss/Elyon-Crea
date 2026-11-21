@@ -22,6 +22,8 @@ Une tâche est cochée seulement quand build, lint, tests et tests Playwright pa
 - [x] 9. [Claude] Créer les tables, la sécurité et le contenu de départ (tâche 5) ✅ (6 tables protégées · stockage vérifié · migrations synchronisées · build et lint OK · Playwright 16/16 · captures vérifiées)
 - [x] 10. [Claude] Lire le contenu depuis Supabase (tâche 6) ✅ (lecture réelle vérifiée · 23/23 tests unitaires · build et lint OK · Playwright 16/16 · captures vérifiées)
 - [ ] 11. [Steph] Créer le compte Resend (tâche 7)
+      → Étapes : 1) ouvrir resend.com et créer le compte avec contact@elyoncrea.com ; 2) API Keys → Create API Key ; 3) nom elyon-crea-site, permission Sending access ; 4) coller la clé après RESEND_API_KEY= dans .env.local, puis enregistrer ; 5) répondre « Resend c'est fait ».
+      → Adresse de test et sel anti-spam préparés localement. Validation de la clé en attente.
 
 ## Étape 1 · Lot 3 — Cadre du site (nouveau design premium)
 - [ ] 12. [Claude] Couleurs de la charte, polices Manrope + Inter, outils d'animation (tâche 8)
