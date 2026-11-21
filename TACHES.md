@@ -13,9 +13,9 @@ Une tâche est cochée seulement quand build, lint, tests et tests Playwright pa
 - [x] 4b. [Steph] Nouvelle direction artistique premium : style de référence, charte du logo, constellation colibri / cerveau / ampoule ✅ (2026-11-21 — `design/style-guide-premium.md`, spec §4.0)
 
 ## Étape 1 · Lot 1 — Fondations
-- [ ] 5. [Claude] Créer le projet Next.js, les couleurs et cette liste (plan : tâche 1)
-- [ ] 6. [Claude] Tests de calcul : montants FCFA et lien WhatsApp (tâche 2)
-- [ ] 7. [Claude] Tests automatiques sur 8 tailles d'écran (tâche 3)
+- [x] 5. [Claude] Créer le projet Next.js, les couleurs et cette liste (plan : tâche 1) ✅ (build et lint OK · page temporaire vérifiée)
+- [x] 6. [Claude] Tests de calcul : montants FCFA et lien WhatsApp (tâche 2) ✅ (9/9 tests unitaires)
+- [x] 7. [Claude] Tester la page sur 7 largeurs et sur iPhone simulé (tâche 3) ✅ (build et lint OK · Playwright 16/16 · 16 captures vérifiées)
 
 ## Étape 1 · Lot 2 — Base de données et e-mails
 - [ ] 8. [Steph] Créer le projet Supabase (tâche 4)
