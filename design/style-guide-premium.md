@@ -2,7 +2,7 @@
 
 > Fourni par Steph le 2026-11-21. Référence principale pour la direction artistique, les espacements, la typographie et la composition.
 > **Adaptations Elyon Créa** (décisions dans `CLAUDE.md` §14) :
-> - Couleurs = **charte du logo** : `#8052ff` (Electric Iris) → **magenta `#A80175`** ; `#ffb829` (Saffron Spark) → **cyan `#13BBD2`** ; `#15846e` (Deep Verdant) → **encre `#200F1C`**.
+> - Couleurs = **charte du logo** : `#8052ff` (Electric Iris) → **magenta `#A10684`** ; `#ffb829` (Saffron Spark) → **cyan `#38BFCB`** ; `#15846e` (Deep Verdant) → **encre `#281B2A`**.
 > - Constellation du Hero : **colibri du logo, cerveau, ampoule** (au lieu du cerveau seul).
 > - Contenu : celui de la maquette Banani (`design/banani/`), pas celui de Dala.
 > - Police : PP Neue Montreal est payante → choix du remplaçant à faire avec Steph.
@@ -26,9 +26,9 @@ Dala operates as a dark-stage environment where black voids meet a single vivid 
 | Bone White | `#ffffff` | `--color-bone-white` | Headlines, body text, icon fills, nav active state |
 | Ash Gray | `#9a9a9a` | `--color-ash-gray` | Muted nav text, ghost link color, secondary labels |
 | Silver Mist | `#bdbdbd` | `--color-silver-mist` | Tertiary body text, caption-level information |
-| Electric Iris | `#8052ff` | `--color-electric-iris` | Primary action buttons, logo mark, brand accents (→ Elyon : magenta `#A80175`) |
-| Saffron Spark | `#ffb829` | `--color-saffron-spark` | Highlight emphasis text, accent links, attention punctuation (→ Elyon : cyan `#13BBD2`) |
-| Deep Verdant | `#15846e` | `--color-deep-verdant` | Secondary surface tint, logo gradient stop (→ Elyon : encre `#200F1C`) |
+| Electric Iris | `#8052ff` | `--color-electric-iris` | Primary action buttons, logo mark, brand accents (→ Elyon : magenta `#A10684`) |
+| Saffron Spark | `#ffb829` | `--color-saffron-spark` | Highlight emphasis text, accent links, attention punctuation (→ Elyon : cyan `#38BFCB`) |
+| Deep Verdant | `#15846e` | `--color-deep-verdant` | Secondary surface tint, logo gradient stop (→ Elyon : encre `#281B2A`) |
 
 ## Tokens — Typography
 
