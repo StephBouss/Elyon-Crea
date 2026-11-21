@@ -18,7 +18,7 @@ Une tâche est cochée seulement quand build, lint, tests et tests Playwright pa
 - [x] 7. [Claude] Tester la page sur 7 largeurs et sur iPhone simulé (tâche 3) ✅ (build et lint OK · Playwright 16/16 · 16 captures vérifiées)
 
 ## Étape 1 · Lot 2 — Base de données et e-mails
-- [ ] 8. [Steph] Créer le projet Supabase (tâche 4)
+- [x] 8. [Steph] Créer le projet Supabase (tâche 4) ✅ (paramètres locaux renseignés · connexion vérifiée)
 - [ ] 9. [Claude] Créer les tables, la sécurité et le contenu de départ (tâche 5)
 - [ ] 10. [Claude] Lire le contenu depuis Supabase (tâche 6)
 - [ ] 11. [Steph] Créer le compte Resend (tâche 7)
