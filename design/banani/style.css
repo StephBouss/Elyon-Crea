@@ -1,0 +1,45 @@
+@theme {
+  /* used via utility-classes, bg-background, text-primary, and many more */
+  --color-background: #ffffff;
+  --color-foreground: #0E0E0E;
+  --color-border: #2a2a2a;
+  --color-input: #1a1a1a;
+  --color-primary: #C2147A;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #F9B000;
+  --color-secondary-foreground: #0E0E0E;
+  --color-muted: #6E6E6E;
+  --color-muted-foreground: #9a9a9a;
+  --color-dark: #0E0E0E;
+  --color-dark-card: #161616;
+  --color-light: #FAF8F5;
+  --color-light-card: #F2EFE9;
+  --color-accent-gold: #F9B000;
+  --color-accent-magenta: #C2147A;
+
+  /* DO NOT REMOVE: these radius variables are required by the theme editor. */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 32px;
+
+  /* DONT CHANGE OR REMOVE THIS VARIABLE */
+  --radius: var(--radius-sm);
+
+  /* DO NOT REMOVE: these font variables are required by the theme editor. */
+  /* available fonts: "Inter", "DM Sans", "Nunito", "PT Serif", "Space Grotesk", "IBM Plex Mono", "IBM Plex Sans", "Roboto Slab", "Geist", "Shantell Sans" */
+  --font-body: DM Sans;
+  --font-headings: DM Sans;
+
+  /* Add and change text sizes as you see fit */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 36px;
+  --text-5xl: 48px;
+  --text-6xl: 64px;
+}

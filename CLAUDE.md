@@ -106,6 +106,7 @@ Ensuite, pour chaque lot d'écrans :
 | Zone | Écran Banani | Route prévue |
 |---|---|---|
 | Public | Landing Page — version retenue : `ElyonLanding_copy1_copy1` (2 autres variantes existent) | `/` |
+| Public | Audit gratuit (page formulaire) | `/audit-gratuit` |
 | Public | Réalisations | `/realisations` |
 | Public | Mentions légales | `/mentions-legales` |
 | Public | Connexion | `/connexion` |
@@ -387,4 +388,5 @@ npx playwright show-report   → ouvrir le dernier rapport de tests
 - **2026-11-21** — Comptabilité SYSCOHADA : **Option A** — reprendre le schéma d'**Iwadu Conta** (plan comptable, structure des écritures) dans ce projet. Le back-office a sa propre comptabilité autonome, avec les 4 écrans de la maquette (Journal, Grand livre, Balance, Rapprochement bancaire). Emplacement du code Iwadu Conta : à demander à Steph au moment du plan.
 - **2026-11-21** — Hero : **diaporama (Hero Slideshow)**. Garde-fous performance : 1re image chargée en priorité (AVIF/WebP), les suivantes chargées seulement après l'affichage de la page ; défilement en fondu (opacity) ; diaporama figé sur la 1re image si `prefers-reduced-motion`.
 - **2026-11-21** — **Mode Inspecteur** = contrôle de conformité de l'entreprise : suivi des papiers administratifs (dates d'expiration), de la comptabilité à jour, et des échéances de paiements administratifs (impôts, CNSS, etc.), avec **rappels avant expiration**. Route prévue : `/admin/inspecteur`. Détails (liste des documents, délais et canal des rappels) à préciser lors de la conception de cet écran. Section 12 Q5 (sections/écrans optionnels) reportée à la Phase 2, avec la maquette sous les yeux.
+- **2026-11-21** — Phase 2 (maquette) : landing gardée telle quelle (12 sections) ; sections Header V1, Parcours de campagne, Grille 8 services, Méthode, Témoignages et bloc Conversion **écartées**. Ajout de la page **`/audit-gratuit`** (formulaire complet avec fichiers joints) : tous les boutons « Audit gratuit » y mènent. Connexion : e-mail + mot de passe, **Google et Microsoft** (réservés aux administrateurs autorisés). Maquettes exportées dans `design/banani/`.
 - **2026-11-21** — Ordre de livraison : **landing page d'abord** (mise en ligne rapide ; contenu modifiable directement dans Supabase en attendant), **puis back-office**.

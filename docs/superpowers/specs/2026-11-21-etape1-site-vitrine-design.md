@@ -43,12 +43,20 @@ Ordre justifié par les dépendances : la comptabilité a besoin des factures, l
 
 | Page | Route | Contenu |
 |---|---|---|
-| Accueil | `/` | Les 12 sections de `CLAUDE.md` §5.A, dans l'ordre |
-| Réalisations | `/realisations` | Tous les projets publiés, filtre par catégorie |
+| Accueil | `/` | Les 12 sections de `CLAUDE.md` §5.A, dans l'ordre (maquette `ElyonLanding_copy1_copy1`) |
+| Audit gratuit | `/audit-gratuit` | Page dédiée au formulaire (maquette `ElyonAuditGratuit` + `ElyonAuditForm`) |
+| Réalisations | `/realisations` | Tous les projets publiés, filtre par catégorie (maquette `ElyonRealisations`) |
 | Mentions légales | `/mentions-legales` | Texte légal (infos entreprise fournies par Steph) |
-| Connexion | `/connexion` | Connexion Supabase Auth fonctionnelle → page protégée « Back-office en construction » (`/admin`) |
+| Connexion | `/connexion` | Connexion Supabase Auth fonctionnelle (e-mail + mot de passe, Google, Microsoft) → page protégée « Back-office en construction » (`/admin`) |
 
-Les variantes de sections (Header V2, Method, AI Section, Rareté & Urgence, Portfolio…) seront retenues ou écartées en Phase 2.
+**Maquettes** : exportées depuis Banani dans `design/banani/` (écrans dans `screens/`, sections dans `components/`, thème dans `style.css`).
+
+**Décisions de la Phase 2 (2026-11-21)** :
+- Landing gardée **telle quelle** (12 sections). Sections non retenues : Header V1, Parcours de campagne, Grille de 8 services, Méthode, Témoignages, bloc Conversion.
+- **Tous les boutons « Audit gratuit » / « Recevoir mon audit gratuit » / « Démarrer mon projet »** mènent à `/audit-gratuit`.
+- **En-tête V2 sur toutes les pages publiques** (la maquette Réalisations utilise l'en-tête V1 : harmonisé).
+- E-mail affiché partout : `contact@elyoncrea.com` (la maquette Mentions légales affiche `.ga`).
+- Bouton « Microsoft » de la Connexion : la maquette utilise une icône Facebook par erreur → vrai logo Microsoft.
 
 ### 3.2 Hors périmètre de l'étape 1
 
@@ -81,7 +89,23 @@ Tout le back-office fonctionnel (édition du contenu, devis, factures, comptabil
 
 ### 4.3 Formulaire « Audit gratuit »
 
-**Champs** : ceux de la maquette. À défaut : nom, entreprise, téléphone WhatsApp, **e-mail (obligatoire)**, service souhaité, message.
+**Champs** (maquette `ElyonAuditForm`) :
+
+| Champ | Type | Obligatoire |
+|---|---|---|
+| Nom | texte | oui |
+| Adresse e-mail | e-mail | oui |
+| Nom de l'entreprise | texte | oui |
+| Secteur d'activité | liste déroulante (liste à confirmer par Steph) | oui |
+| Téléphone | téléphone (format gabonais accepté, ex. +241 …) | oui |
+| Budget annuel (XAF) | liste : moins de 500 000 · 500 000 – 2 000 000 · plus de 2 000 000 | oui |
+| Besoin principal | cases à cocher multiples (6 choix de la maquette) | au moins 1 |
+| Parlez-nous de votre projet | texte long | non |
+| Documents à auditer | fichiers (PNG, JPG, WebP, PDF) + liens web | non |
+| Politique de confidentialité | case à cocher | **oui** |
+| Recevoir les conseils d'Elyon Créa par e-mail | case à cocher | **non** (séparée de la précédente : le consentement marketing doit rester libre) |
+
+**Fichiers joints** : 5 fichiers maximum, 10 Mo chacun, stockés dans un bucket Supabase Storage **privé** (`audit-fichiers`), jamais lisible publiquement. Jusqu'à 3 liens web. L'e-mail de notification contient des liens de téléchargement temporaires.
 
 **Parcours** :
 1. Validation Zod dans le navigateur, avec les erreurs en français sous chaque champ.
@@ -102,6 +126,7 @@ Tout le back-office fonctionnel (édition du contenu, devis, factures, comptabil
 - Clés dans `.env.local` (non commité). `.env.example` tenu à jour, sans valeurs.
 - Clé `service_role` Supabase et clé Resend utilisées **uniquement côté serveur**.
 - `/admin` protégé côté serveur (middleware + vérification de session).
+- **Connexion Google / Microsoft** (Supabase Auth, fournisseurs Google et Azure) : seuls les comptes dont l'e-mail figure dans une **liste d'administrateurs autorisés** accèdent à `/admin`. Toute autre personne est déconnectée avec un message « Accès non autorisé ». Configuration des comptes Google Cloud et Microsoft Azure : tâches `[Steph]` guidées clic par clic.
 
 ### 4.5 Performance
 
@@ -134,11 +159,13 @@ Chaque action manuelle sera décrite clic par clic dans `TACHES.md` (tâches `[S
 - Réalisations à afficher (avec l'accord des clients) : textes et images.
 - Mentions légales : raison sociale, RCCM, NIF, adresse, responsable de publication.
 - Textes et prix définitifs des formules, nombre de places.
-- Délai de recontact annoncé dans l'e-mail de confirmation (ex. « sous 24 h »).
+- Délai de recontact annoncé (à harmoniser : la maquette dit « 48h » dans le CTA final et « 24h ouvrables » sur la page Audit).
+- Liste des secteurs d'activité du formulaire.
+- Vrai fichier du logo et 4 images pour le diaporama (Stratégie, Création, Digital, IA).
 
 ---
 
 ## 6. Prochaines étapes
 
-1. **Phase 2** : lecture de la maquette Banani via le MCP, liste des écrans et sections, choix des variantes (décision n° 5).
+1. ~~**Phase 2** : lecture de la maquette Banani via le MCP, liste des écrans et sections, choix des variantes (décision n° 5).~~ ✅ 2026-11-21
 2. **Phase 3** : plan détaillé de l'étape 1 et création de `TACHES.md`.
