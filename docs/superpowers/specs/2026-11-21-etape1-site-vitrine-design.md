@@ -56,6 +56,7 @@ Ordre justifié par les dépendances : la comptabilité a besoin des factures, l
 - **Tous les boutons « Audit gratuit » / « Recevoir mon audit gratuit » / « Démarrer mon projet »** mènent à `/audit-gratuit`.
 - **En-tête V2 sur toutes les pages publiques** (la maquette Réalisations utilise l'en-tête V1 : harmonisé).
 - E-mail affiché partout : `contact@elyoncrea.com` (la maquette Mentions légales affiche `.ga`).
+- **Délai de réponse annoncé partout : « sous 24h ouvrables »** (CTA final, page Audit, e-mail de confirmation) — la maquette affichait « 48h » dans le CTA final.
 - Bouton « Microsoft » de la Connexion : la maquette utilise une icône Facebook par erreur → vrai logo Microsoft.
 
 ### 3.2 Hors périmètre de l'étape 1
@@ -159,7 +160,6 @@ Chaque action manuelle sera décrite clic par clic dans `TACHES.md` (tâches `[S
 - Réalisations à afficher (avec l'accord des clients) : textes et images.
 - Mentions légales : raison sociale, RCCM, NIF, adresse, responsable de publication.
 - Textes et prix définitifs des formules, nombre de places.
-- Délai de recontact annoncé (à harmoniser : la maquette dit « 48h » dans le CTA final et « 24h ouvrables » sur la page Audit).
 - Liste des secteurs d'activité du formulaire.
 - Vrai fichier du logo et 4 images pour le diaporama (Stratégie, Création, Digital, IA).
 
