@@ -20,6 +20,12 @@ export function trackErrors(page: Page) {
 
 export async function settle(page: Page) {
   await page.waitForLoadState("networkidle");
+  // « networkidle » peut précéder l’installation des animations par React : défiler trop tôt
+  // laisserait le nom géant caché. En mouvement réduit, il n’est jamais découpé en lettres.
+  await page.waitForFunction(() => {
+    const name = document.querySelector("footer p[aria-hidden='true']");
+    return !name || matchMedia("(prefers-reduced-motion: reduce)").matches || name.querySelector("div > div");
+  });
   await page.evaluate(async () => {
     await document.fonts.ready;
     // Déclenche les animations à l’apparition et le chargement différé.
@@ -30,8 +36,15 @@ export async function settle(page: Page) {
       await new Promise((resolve) => setTimeout(resolve, 120));
     }
     window.scrollTo({ top: height, left: 0, behavior: "instant" });
-    // Laisse ScrollTrigger valider la fin de la révélation avant de remonter.
-    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+  });
+  // On attend en bas de page que le nom géant soit vraiment révélé avant de remonter.
+  await expect.poll(() => page.locator("footer p[aria-hidden='true'] div > div").evaluateAll(
+    (letters) => letters.every((letter) => {
+      const { transform } = getComputedStyle(letter);
+      return transform === "none" || new DOMMatrix(transform).isIdentity;
+    }),
+  ), { message: "le nom géant du pied de page n’est pas révélé" }).toBe(true);
+  await page.evaluate(async () => {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     const animations = document.getAnimations().filter(
       (animation) => animation.playState === "running" &&

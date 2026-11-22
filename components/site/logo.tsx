@@ -9,13 +9,13 @@ type Props = {
 
 export function Logo({ className, priority = false, background = "dark" }: Props) {
   const src = background === "light"
-    ? "/images/logos/elyon_crea_logo_fond_clair.svg"
-    : "/images/logos/elyon_crea_logo_fond_sombre.svg";
+    ? "/images/logos/elyon_crea_logo_compact_fond_clair.svg"
+    : "/images/logos/elyon_crea_logo_compact_fond_sombre.svg";
   return (
     <Image
       src={src}
       alt="Elyon Créa"
-      width={1060}
+      width={980}
       height={310}
       preload={priority}
       className={cn("h-9 w-auto max-w-full md:h-10", className)}
