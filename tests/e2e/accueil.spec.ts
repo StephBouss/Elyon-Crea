@@ -2,6 +2,57 @@ import { expect, test } from "@playwright/test";
 import { checkPage, trackErrors } from "./utils/layout";
 
 test.describe("Accueil", () => {
+  test("pied de page et bouton WhatsApp", async ({ page }) => {
+    const { errors } = trackErrors(page);
+    await page.goto("/");
+    const footer = page.getByRole("contentinfo");
+    await expect(footer.getByRole("link", { name: "contact@elyoncrea.com" })).toHaveAttribute("href", "mailto:contact@elyoncrea.com");
+    const mentions = footer.getByRole("link", { name: "Mentions légales" });
+    await expect(mentions).toHaveAttribute("href", "/mentions-legales");
+    await expect(footer.getByRole("link", { name: "Audit gratuit" })).toHaveAttribute("href", "/audit-gratuit");
+    await expect(footer.getByRole("link", { name: "Réalisations" })).toHaveAttribute("href", "/realisations");
+    await expect(footer).toContainText(`© ${new Date().getFullYear()} Elyon Créa · Libreville · Gabon`);
+    await expect(footer).toContainText("sous 24h ouvrables");
+    await expect(footer).not.toContainText("hello@");
+
+    const whatsapp = page.getByRole("link", { name: "Nous écrire sur WhatsApp" });
+    await expect(whatsapp).toHaveAttribute("href", /^https:\/\/wa\.me\/\d{8,}\?text=/);
+    await expect(whatsapp).toHaveAttribute("target", "_blank");
+    const footerWhatsApp = footer.getByRole("link", { name: "Écrire sur WhatsApp" });
+    await expect(footerWhatsApp).toHaveAttribute("href", (await whatsapp.getAttribute("href"))!);
+    await expect(whatsapp).toHaveCSS("opacity", "1");
+
+    await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+    const floatingBox = (await whatsapp.boundingBox())!;
+    const mentionsBox = (await mentions.boundingBox())!;
+    expect(floatingBox.width).toBe(56);
+    expect(floatingBox.height).toBe(56);
+    expect(mentionsBox.y + mentionsBox.height).toBeLessThanOrEqual(floatingBox.y);
+    expect(errors, errors.join("\n")).toEqual([]);
+  });
+
+  test("le nom géant du pied de page n’est pas rogné par son animation", async ({ page }) => {
+    await page.goto("/");
+    const name = page.locator("footer p[aria-hidden='true']");
+    const letters = name.locator("div > div");
+    await expect(letters).toHaveCount("ElyonCréa".length);
+
+    await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+    await expect.poll(() => letters.evaluateAll((elements) => elements.every((element) => {
+      const { transform } = getComputedStyle(element);
+      return transform === "none" || new DOMMatrix(transform).isIdentity;
+    }))).toBe(true);
+    // Le bouton flottant et l’en-tête bougent encore après l’arrivée en bas de page.
+    await page.waitForTimeout(2500);
+
+    const box = (await name.boundingBox())!;
+    const clip = { x: 0, y: box.y - box.height * 0.1, width: page.viewportSize()!.width, height: box.height * 1.3 };
+    const masked = await page.screenshot({ clip });
+    await page.addStyleTag({ content: "footer p[aria-hidden='true'] * { overflow: visible !important; }" });
+    const unmasked = await page.screenshot({ clip });
+    expect(masked.equals(unmasked), "les masques cachent une partie des lettres").toBe(true);
+  });
+
   for (const reducedMotion of ["no-preference", "reduce"] as const) {
     test(`en-tête et menu plein écran (${reducedMotion})`, async ({ page }, testInfo) => {
       await page.emulateMedia({ reducedMotion });

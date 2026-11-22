@@ -29,7 +29,10 @@ export default defineConfig({
   ],
   webServer: {
     command: "npm run build && npm run start",
-    env: { PORT: port },
+    env: {
+      PORT: port,
+      NEXT_PUBLIC_WHATSAPP_NUMBER: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "24100000000",
+    },
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 300_000,

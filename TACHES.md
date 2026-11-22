@@ -28,7 +28,7 @@ Une tâche est cochée seulement quand build, lint, tests et tests Playwright pa
 ## Étape 1 · Lot 3 — Cadre du site (nouveau design premium)
 - [x] 12. [Claude] Couleurs de la charte, polices Manrope + Inter, outils d'animation et logos définitifs (tâche 8) ✅ (build et lint OK · 23/23 tests unitaires · Playwright 16/16 · captures vérifiées)
 - [x] 13. [Claude] En-tête transparent + menu plein écran (tâche 9) ✅ (build et lint OK · 31/31 tests unitaires · Playwright 40/40 · captures vérifiées)
-- [ ] 14. [Claude] Pied de page au nom géant + bouton WhatsApp (tâche 10)
+- [x] 14. [Claude] Pied de page au nom géant + bouton WhatsApp (tâche 10) ✅ (build et lint OK · 32/32 tests unitaires · Playwright 56/56 · captures vérifiées)
 
 ## Étape 1 · Lot 4a — Landing : la constellation
 - [ ] 15. [Claude] Formes de la constellation : colibri, cerveau, ampoule (tâche 11)

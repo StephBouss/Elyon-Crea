@@ -29,6 +29,9 @@ export async function settle(page: Page) {
       window.scrollTo({ top: y, left: 0, behavior: "instant" });
       await new Promise((resolve) => setTimeout(resolve, 120));
     }
+    window.scrollTo({ top: height, left: 0, behavior: "instant" });
+    // Laisse ScrollTrigger valider la fin de la révélation avant de remonter.
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     const animations = document.getAnimations().filter(
       (animation) => animation.playState === "running" &&
@@ -39,6 +42,11 @@ export async function settle(page: Page) {
   });
   // GSAP utilise des animations qui ne figurent pas dans document.getAnimations().
   await page.waitForTimeout(900);
+  const whatsapp = page.getByRole("link", { name: "Nous écrire sur WhatsApp", includeHidden: true });
+  if (await whatsapp.count()) {
+    await expect(whatsapp).toBeVisible();
+    await expect(whatsapp).toHaveCSS("opacity", "1");
+  }
   await page.waitForLoadState("networkidle");
 }
 
