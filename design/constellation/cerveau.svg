@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <defs>
+    <g id="cote" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M112 34 C104 14 76 12 66 32 C44 30 32 48 38 66 C18 74 12 98 26 112 C10 126 12 154 32 162 C30 186 52 202 70 196 C78 220 106 222 112 202 Z"/>
+      <path d="M112 72 C94 76 84 64 88 48"/>
+      <path d="M38 66 C54 60 68 70 66 88 C65 98 56 102 48 100"/>
+      <path d="M112 118 C94 120 84 106 90 92"/>
+      <path d="M26 112 C42 110 52 120 66 118 C78 116 84 128 78 140 C74 148 64 150 56 146"/>
+      <path d="M112 160 C96 156 84 166 88 184"/>
+      <path d="M32 162 C44 166 56 168 62 178"/>
+    </g>
+  </defs>
+  <use href="#cote"/>
+  <use href="#cote" transform="translate(240 0) scale(-1 1)"/>
+</svg>
