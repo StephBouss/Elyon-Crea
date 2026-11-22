@@ -148,9 +148,9 @@ export function Hero({ messages }: { messages: HeroMessage[] }) {
               <p className={CLASSE_SOUS_TITRE}>{m.sousTitre}</p>
             </div>
           ))}
-          {/* Seul le titre est recréé : réutiliser les paragraphes évite que chaque rotation compte comme un nouvel affichage principal (LCP). */}
+          {/* Le sous-titre n’est jamais recréé : cela évite que chaque rotation compte comme un nouvel affichage principal (LCP). */}
           <div className="col-start-1 row-start-1 min-w-0 self-end">
-            <p data-fondu className="hero-fondu text-label text-accent" style={delai(0.2)}>{message.tag}</p>
+            <p key={`tag-${passage}`} data-fondu className={cn("text-label text-accent", premier && "hero-fondu")} style={delai(0.2)}>{message.tag}</p>
             <h1
               key={passage}
               id="hero-titre"

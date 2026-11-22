@@ -31,9 +31,9 @@ Une tâche est cochée seulement quand build, lint, tests et tests Playwright pa
 - [x] 14. [Claude] Pied de page au nom géant + bouton WhatsApp (tâche 10) ✅ (build et lint OK · 32/32 tests unitaires · Playwright 56/56 · captures vérifiées)
 
 ## Étape 1 · Lot 4a — Landing : la constellation
-- [ ] 15. [Claude] Formes de la constellation : colibri, cerveau, ampoule (tâche 11)
-- [ ] 16. [Claude] Moteur de particules (tâche 12)
-- [ ] 17. [Claude] Hero plein écran avec les 4 messages (tâche 13)
+- [x] 15. [Claude] Formes de la constellation : colibri, cerveau, ampoule (tâche 11) ✅ (build et lint OK · 62/62 tests unitaires · Playwright 88/88 · captures vérifiées)
+- [x] 16. [Claude] Moteur de particules (tâche 12) ✅ (build et lint OK · 62/62 tests unitaires · Playwright 88/88 · captures vérifiées · 61 images/s sur mobile lent simulé)
+- [x] 17. [Claude] Hero plein écran avec les 4 messages (tâche 13) ✅ (build et lint OK · 62/62 tests unitaires · Playwright 88/88 · captures vérifiées)
 
 ## Étape 1 · Lot 4b — Landing : le message
 - [ ] 18. [Claude] Chiffres clés géants (tâche 14)
