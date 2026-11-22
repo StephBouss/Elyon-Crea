@@ -145,5 +145,7 @@
 }
 html { scroll-padding-top: 5rem; }
 body { background-color: var(--color-canvas); color: var(--color-ink); font-family: var(--font-body); font-weight: 200; }
-h1,h2,h3,h4 { font-family: var(--font-display); font-weight: 400; }
+@layer base {
+  h1,h2,h3,h4 { font-family: var(--font-display); font-weight: 400; }
+}
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } .btn-pill:hover { transform: none; } }
