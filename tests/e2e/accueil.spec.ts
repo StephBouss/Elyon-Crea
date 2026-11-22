@@ -146,6 +146,64 @@ test.describe("Accueil", () => {
     await expect.poll(() => header.evaluate((el) => el.getBoundingClientRect().top)).toBe(0);
     expect(errors, errors.join("\n")).toEqual([]);
   });
+  test("hero : titre unique, 4 messages et boutons", async ({ page }) => {
+    const { errors } = trackErrors(page);
+    await page.goto("/");
+    const hero = page.locator("section[aria-labelledby='hero-titre']");
+    await expect(page.getByRole("region", { name: /De la stratégie au déploiement — votre communication 360°/ })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("votre communication 360°");
+    await expect(hero.getByRole("link", { name: "Démarrer mon projet" })).toHaveAttribute("href", "/audit-gratuit");
+    await expect(hero.getByRole("link", { name: "Voir nos réalisations" })).toHaveAttribute("href", "/realisations");
+    const message = (n: number) => hero.getByRole("button", { name: `Afficher le message ${n}` });
+    await expect(message(1)).toHaveAttribute("aria-current", "true");
+    await message(2).click();
+    await expect(page.locator("h1")).toContainText("une identité qui marque les esprits");
+    await expect(message(2)).toHaveAttribute("aria-current", "true");
+    await message(4).click();
+    await message(3).click();
+    await expect(page.locator("h1")).toContainText("amplifiée et optimisée");
+    await message(4).click();
+    await expect(page.locator("h1")).toContainText("de votre communication");
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(hero.locator("canvas")).toHaveAttribute("aria-hidden", "true");
+    expect(errors, errors.join("\n")).toEqual([]);
+  });
+
+  test("hero : les particules sont dessinées", async ({ page }) => {
+    await page.goto("/");
+    await expect.poll(() => page.locator("canvas").evaluate((toile: HTMLCanvasElement) => {
+      const { data } = toile.getContext("2d")!.getImageData(0, 0, toile.width, toile.height);
+      let pixels = 0;
+      for (let i = 3; i < data.length; i += 4) if (data[i] > 40) pixels++;
+      return pixels;
+    }), { timeout: 20_000 }).toBeGreaterThan(1000);
+  });
+
+  test("hero : défilement automatique des messages, avec pause", async ({ page }) => {
+    test.setTimeout(60_000);
+    await page.goto("/");
+    const titre = page.locator("h1");
+    await page.getByRole("button", { name: "Mettre les messages en pause" }).click();
+    await page.mouse.move(5, 5);
+    await page.waitForTimeout(8500);
+    await expect(titre).toContainText("votre communication 360°");
+    await page.getByRole("button", { name: "Reprendre le défilement des messages" }).click();
+    await page.mouse.move(5, 5);
+    await expect(titre).toContainText("une identité qui marque les esprits", { timeout: 12_000 });
+  });
+
+  test("hero : changer de message ne déplace pas les boutons", async ({ page }) => {
+    await page.goto("/");
+    const bouton = page.getByRole("link", { name: "Démarrer mon projet" });
+    await page.waitForTimeout(2500);
+    const avant = (await bouton.boundingBox())!;
+    for (const n of [2, 3, 4]) {
+      await page.getByRole("button", { name: `Afficher le message ${n}` }).click();
+      await page.waitForTimeout(900);
+      expect((await bouton.boundingBox())!.y).toBeCloseTo(avant.y, 0);
+    }
+  });
+
   test("s’affiche sans erreur ni débordement", async ({ page }, testInfo) => {
     const { errors } = trackErrors(page);
     await page.goto("/");
@@ -164,7 +222,10 @@ test.describe("Accueil", () => {
       );
       expect(reducedMotion).toBe(true);
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+      await expect(page.getByRole("button", { name: "Mettre les messages en pause" })).toBeHidden();
       await checkPage(page, testInfo, "accueil-reduced", errors);
+      await page.getByRole("button", { name: "Afficher le message 2" }).click();
+      await expect(page.locator("h1")).toContainText("une identité qui marque les esprits");
     });
   });
 });
