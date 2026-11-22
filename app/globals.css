@@ -150,6 +150,10 @@
   .hero-mot { animation: hero-mot 0.8s var(--ease-premium) var(--delai, 0s) backwards; }
   .hero-fondu { animation: hero-fondu 0.6s var(--ease-premium) var(--delai, 0s) backwards; }
 }
+/* Sous 1024 px, le texte passe devant la constellation : un halo noir le détache. */
+@media (max-width: 1023.98px) {
+  .hero-halo { text-shadow: 0 0 8px var(--color-canvas); }
+}
 html { scroll-padding-top: 5rem; }
 body { background-color: var(--color-canvas); color: var(--color-ink); font-family: var(--font-body); font-weight: 200; }
 @layer base {

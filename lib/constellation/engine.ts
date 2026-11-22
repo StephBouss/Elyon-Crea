@@ -1,5 +1,5 @@
 export type FormeId = "colibri" | "cerveau" | "ampoule";
-export type FormesJson = { n: number; palette: string[]; formes: Record<FormeId, number[]> };
+export type FormesJson = { n: number; palette: string[]; teintesAmbiance?: number; formes: Record<FormeId, number[]> };
 export type OptionsConstellation = {
   n: number;
   ambiance: number;
@@ -97,7 +97,7 @@ export class ConstellationEngine {
       if (i >= this.nForme) {
         this.ox[i] = Math.random();
         this.oy[i] = Math.random();
-        this.couleur[i] = Math.floor(Math.random() * donnees.palette.length);
+        this.couleur[i] = Math.floor(Math.random() * (donnees.teintesAmbiance ?? donnees.palette.length));
       }
     }
     this.appliquerForme("colibri");

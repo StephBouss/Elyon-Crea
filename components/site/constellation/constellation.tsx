@@ -11,7 +11,7 @@ type Reglages = Pick<OptionsConstellation, "n" | "ambiance" | "centre" | "echell
 const REGLAGES: Record<Variante, { pc: Reglages; mobile: Reglages }> = {
   hero: {
     pc: { n: 2000, ambiance: 240, centre: { x: 0.72, y: 0.52 }, echelle: 0.38, opacite: 1 },
-    mobile: { n: 900, ambiance: 110, centre: { x: 0.5, y: 0.31 }, echelle: 0.38, opacite: 0.75 },
+    mobile: { n: 900, ambiance: 110, centre: { x: 0.5, y: 0.5 }, echelle: 0.38, opacite: 0.65 },
   },
   cta: {
     pc: { n: 1400, ambiance: 170, centre: { x: 0.72, y: 0.5 }, echelle: 0.38, opacite: 1 },
@@ -40,6 +40,9 @@ function quandDisponible(action: () => void): () => void {
   const id = setTimeout(action, 200);
   return () => clearTimeout(id);
 }
+
+/** Sous 1024 px, le bas du Hero est couvert par le texte : inutile d’y peindre des particules. */
+const TAILLE: Record<Variante, string> = { hero: "h-[62%] lg:h-full", cta: "h-full" };
 
 type Props = {
   forme: FormeId;
@@ -141,5 +144,5 @@ export function Constellation({ forme, variante, dispersionAuDefilement = false,
     return () => mm.revert();
   }, { scope: ref, dependencies: [variante, dispersionAuDefilement], revertOnUpdate: true });
 
-  return <canvas ref={ref} aria-hidden="true" className={cn("pointer-events-none absolute inset-0 h-full w-full", className)} />;
+  return <canvas ref={ref} aria-hidden="true" className={cn("pointer-events-none absolute inset-x-0 top-0 w-full", TAILLE[variante], className)} />;
 }
