@@ -26,7 +26,7 @@ Une tâche est cochée seulement quand build, lint, tests et tests Playwright pa
       → Adresse de test et sel anti-spam préparés localement. Validation de la clé en attente.
 
 ## Étape 1 · Lot 3 — Cadre du site (nouveau design premium)
-- [ ] 12. [Claude] Couleurs de la charte, polices Manrope + Inter, outils d'animation (tâche 8)
+- [x] 12. [Claude] Couleurs de la charte, polices Manrope + Inter, outils d'animation et logos définitifs (tâche 8) ✅ (build et lint OK · 23/23 tests unitaires · Playwright 16/16 · captures vérifiées)
 - [ ] 13. [Claude] En-tête transparent + menu plein écran (tâche 9)
 - [ ] 14. [Claude] Pied de page au nom géant + bouton WhatsApp (tâche 10)
 

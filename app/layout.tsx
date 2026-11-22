@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
 
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-  display: "swap",
-});
+const manrope = Manrope({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-manrope", display: "swap" });
+const inter = Inter({ subsets: ["latin"], weight: ["200", "400", "600"], variable: "--font-inter", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
@@ -21,8 +18,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={dmSans.variable}>
-      <body className="min-h-dvh antialiased">{children}</body>
+    <html lang="fr" className={`${manrope.variable} ${inter.variable}`}>
+      <body className="min-h-dvh bg-canvas text-ink antialiased">{children}</body>
     </html>
   );
 }
+

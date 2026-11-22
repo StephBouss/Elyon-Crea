@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 310" role="img" aria-label="Elyon Créa — Agence Digitale">
+ <defs>
+  <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FF12C3"/><stop offset=".53" stop-color="#A10684"/><stop offset="1" stop-color="#4B007D"/></linearGradient>
+  <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00E6F2"/><stop offset=".52" stop-color="#00CFE6"/><stop offset="1" stop-color="#2455F4"/></linearGradient>
+  <linearGradient id="feather" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00CFE6"/><stop offset=".45" stop-color="#3B27D7"/><stop offset="1" stop-color="#A10684"/></linearGradient>
+  <linearGradient id="orbit" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#E900B8"/><stop offset=".55" stop-color="#6332DF"/><stop offset="1" stop-color="#00CFE6"/></linearGradient>
+ </defs>
+ <g transform="translate(10 6)">
+  <path d="M40 235 C-2 291 123 313 247 236 C155 321 18 316 27 267 C29 257 33 247 40 235Z" fill="url(#orbit)"/>
+  <path d="M139 65 C211 1 276 32 310 76" fill="none" stroke="url(#pink)" stroke-width="5" stroke-linecap="round"/>
+  <g fill="url(#cyan)"><path d="M30 40 54 50 54 75 30 65Z"/><path d="M63 21 88 32 88 58 63 47Z"/><path d="M68 70 92 80 92 105 68 95Z"/><path d="M103 91 123 99 123 121 103 113Z"/><path d="M82 119 98 125 98 143 82 137Z"/></g>
+  <path d="M167 166 C115 151 93 130 82 101 C128 127 179 119 232 163Z" fill="url(#cyan)"/>
+  <path d="M167 173 C112 180 88 164 71 139 C119 150 168 143 232 166Z" fill="url(#feather)"/>
+  <path d="M169 180 C128 205 101 190 86 173 C142 180 185 161 233 168Z" fill="url(#pink)"/>
+  <path d="M232 167 C183 135 152 85 152 13 C177 62 218 105 232 167Z" fill="url(#pink)"/>
+  <path d="M232 167 C194 121 174 79 163 37 C195 86 226 122 232 167Z" fill="#6B0AAB" opacity=".8"/>
+  <path d="M232 167 C256 97 278 77 317 83 C342 86 357 89 403 81 C364 98 335 102 305 106 C287 137 272 167 235 207 C211 233 177 254 142 271 C181 223 207 193 232 167Z" fill="url(#pink)"/>
+  <path d="M234 168 C263 127 278 111 305 106 C283 154 260 198 142 271 C190 213 218 181 234 168Z" fill="url(#cyan)"/>
+  <path d="M252 148 C271 120 283 112 299 107" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="307" cy="92" r="9" fill="#090415"/><circle cx="304" cy="89" r="3.5" fill="#FFFFFF"/>
+  <path d="M314 89 C347 82 381 83 422 85 C380 91 352 95 314 94Z" fill="url(#pink)"/>
+ </g>
+ <g font-family="Manrope, Arial, Helvetica, sans-serif" font-weight="800" font-style="italic" letter-spacing="-3">
+  <text x="428" y="190" font-size="105" fill="#FFFFFF">Elyon</text><text x="731" y="190" font-size="105" fill="url(#pink)">Créa</text>
+ </g>
+ <path d="M867 71 880 58 895 58 880 71Z" fill="url(#cyan)"/>
+ <text x="434" y="235" font-family="Manrope, Arial, Helvetica, sans-serif" font-size="27" font-weight="650" letter-spacing="11" fill="#FFFFFF">AGENCE DIGITALE</text>
+</svg>
